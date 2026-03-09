@@ -249,14 +249,18 @@ function selectOption(selectedOption) {
         correct: scenario.correctAnswer
     };
     
+    const bonusAir = scenario.effect.air;
+    const bonusDigital = scenario.effect.digital;
+    const bonusEnergy = scenario.effect.energy;
+    
     if (isCorrect) {
-        studentData.meters.air = Math.min(100, studentData.meters.air + scenario.effect.air);
-        studentData.meters.digital = Math.min(100, studentData.meters.digital + scenario.effect.digital);
-        studentData.meters.energy = Math.min(100, studentData.meters.energy + scenario.effect.energy);
+        studentData.meters.air = Math.min(100, studentData.meters.air + bonusAir);
+        studentData.meters.digital = Math.min(100, studentData.meters.digital + bonusDigital);
+        studentData.meters.energy = Math.min(100, studentData.meters.energy + bonusEnergy);
     } else {
-        studentData.meters.air = Math.max(0, studentData.meters.air - 3);
-        studentData.meters.digital = Math.max(0, studentData.meters.digital - 3);
-        studentData.meters.energy = Math.max(0, studentData.meters.energy - 3);
+        studentData.meters.air = Math.min(100, studentData.meters.air + Math.floor(bonusAir * 0.3));
+        studentData.meters.digital = Math.min(100, studentData.meters.digital + Math.floor(bonusDigital * 0.3));
+        studentData.meters.energy = Math.min(100, studentData.meters.energy + Math.floor(bonusEnergy * 0.3));
     }
     
     updateMeters();
