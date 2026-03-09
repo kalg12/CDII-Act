@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 3 - Herramientas Digitales</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">🔧</div>
+            <h1>Actividad 3</h1>
+            <p class="subtitle">Exploración de Herramientas y Gestión de Información Digital</p>
+        </header>
+
+        <main id="app">
+            <!-- Paso 1: Datos del estudiante -->
+            <section id="step-1" class="step active">
+                <div class="card">
+                    <h2>📝 Datos del Estudiante</h2>
+                    <form id="student-form">
+                        <div class="form-group">
+                            <label for="name">Nombre(s)</label>
+                            <input type="text" id="name" required placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Apellidos</label>
+                            <input type="text" id="lastname" required placeholder="Tus apellidos">
+                        </div>
+                        <div class="form-group">
+                            <label for="career">Carrera</label>
+                            <select id="career" required>
+                                <option value="">Selecciona tu carrera</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="group">Grupo</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="group" value="A" required>
+                                    <span class="radio-custom"></span>
+                                    Grupo A
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="group" value="B" required>
+                                    <span class="radio-custom"></span>
+                                    Grupo B
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Continuar →</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Paso 2: Relación de conceptos -->
+            <section id="step-2" class="step">
+                <div class="card">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">Relación 1 de 10</span>
+                    
+                    <div class="matching-container">
+                        <div class="matching-question">
+                            <div class="concept-box">
+                                <span class="concept-label">CONCEPTO</span>
+                                <h3 id="concept-text"></h3>
+                            </div>
+                            <div class="arrow">⬇️</div>
+                            <div class="options-box">
+                                <span class="options-label">Arrastra o selecciona la opción correcta:</span>
+                                <div id="match-options" class="match-options"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button id="prev-btn" class="btn-secondary" disabled>← Anterior</button>
+                        <button id="next-btn" class="btn-primary" disabled>Siguiente →</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Paso 3: Resultados -->
+            <section id="step-3" class="step">
+                <div class="card results-card">
+                    <div class="score-circle" id="score-circle">
+                        <span id="score-text">0%</span>
+                    </div>
+                    <h2>🎯 Resultados</h2>
+                    <p id="student-name" class="result-name"></p>
+                    
+                    <div class="feedback-section" id="feedback-section">
+                        <h3>📊 Análisis</h3>
+                        <div id="feedback-content"></div>
+                    </div>
+
+                    <div class="detailed-results" id="detailed-results"></div>
+
+                    <button id="restart-btn" class="btn-secondary">🔄 Nuevo Intento</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Segundo Semestre - Cultura Digital</p>
+        </footer>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
