@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SimulacionLab Estadistico - CETMAR 18</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-badge">Laboratorio Estadistico Escolar</div>
+        <h1>SimulacionLab CETMAR 18</h1>
+        <p>Proyecto: <strong>Respiramos lo que sembramos</strong></p>
+      </header>
+
+      <main>
+        <section id="step-1" class="panel active">
+          <h2>Inicio de Actividad</h2>
+          <p class="lead">
+            Primero registra los datos del equipo para generar el bloque de
+            evidencia al final.
+          </p>
+
+          <form id="student-form" class="grid-form">
+            <label>
+              Nombre(s)
+              <input
+                id="name"
+                type="text"
+                required
+                placeholder="Ej. Karla Guadalupe"
+              />
+            </label>
+            <label>
+              Apellidos
+              <input
+                id="lastname"
+                type="text"
+                required
+                placeholder="Ej. Garcia Lopez"
+              />
+            </label>
+            <label>
+              Carrera
+              <select id="career" required>
+                <option value="">Selecciona tu carrera</option>
+              </select>
+            </label>
+            <fieldset>
+              <legend>Grupo</legend>
+              <label class="inline-opt"
+                ><input type="radio" name="group" value="A" required /> A</label
+              >
+              <label class="inline-opt"
+                ><input type="radio" name="group" value="B" required /> B</label
+              >
+            </fieldset>
+            <label class="full-width">
+              Integrantes del equipo (uno por linea)
+              <textarea
+                id="team-members"
+                rows="4"
+                placeholder="Ej.\nKarla Guadalupe Garcia Lopez\nLuis Alberto Perez Diaz"
+              ></textarea>
+            </label>
+            <button type="submit" class="btn-primary full-width">
+              Iniciar Simulador
+            </button>
+          </form>
+        </section>
+
+        <section id="step-2" class="panel">
+          <div class="phase phase-1">
+            <h2>FASE 1: Presentacion y Datos Ficticios</h2>
+            <div id="intro-message" class="chat-bubble"></div>
+            <div class="table-wrap">
+              <table id="dataset-table">
+                <thead>
+                  <tr>
+                    <th>Estudiante</th>
+                    <th>Horas_Uso_Celular</th>
+                    <th>Nivel_Fatiga_1a10</th>
+                    <th>Consumo_Energia_Apps_kWh</th>
+                  </tr>
+                </thead>
+                <tbody id="dataset-body"></tbody>
+              </table>
+            </div>
+            <div class="quick-actions">
+              <button id="copy-table" class="btn-secondary">
+                Copiar tabla para pegar en Excel/Sheets
+              </button>
+              <button id="download-csv" class="btn-secondary">
+                Descargar archivo CSV
+              </button>
+            </div>
+            <p id="copy-feedback" class="mini-feedback"></p>
+          </div>
+
+          <div class="phase phase-2">
+            <h2>FASE 2: Procesamiento Dinamico</h2>
+            <div class="tips">
+              <p>
+                Ya no necesitas escribir comandos. Solo toca un boton y el
+                simulador genera automaticamente los resultados.
+              </p>
+              <ul>
+                <li>Analizar tendencia central de Horas de uso</li>
+                <li>Analizar tendencia central de Fatiga</li>
+                <li>Analizar tendencia central de Consumo de energia</li>
+                <li>Ver grafico de dispersion Horas vs Fatiga</li>
+              </ul>
+            </div>
+
+            <div class="action-grid">
+              <button id="analyze-hours" class="btn-primary">
+                Tendencia central: Horas de uso
+              </button>
+              <button id="analyze-fatigue" class="btn-primary">
+                Tendencia central: Fatiga
+              </button>
+              <button id="analyze-energy" class="btn-primary">
+                Tendencia central: Consumo de energia
+              </button>
+              <button id="show-scatter" class="btn-primary">
+                Graficar dispersion Horas vs Fatiga
+              </button>
+              <button id="clear-results" class="btn-ghost">
+                Limpiar resultados
+              </button>
+            </div>
+          </div>
+
+          <div class="phase phase-3">
+            <h2>FASE 3: Resultados</h2>
+            <div id="result-area" class="result-area">
+              <p class="muted">Selecciona una accion para comenzar.</p>
+            </div>
+
+            <div class="chart-card">
+              <h3>Grafico</h3>
+              <canvas id="chart-canvas" width="680" height="320"></canvas>
+            </div>
+
+            <div class="evidence-card">
+              <h3>Bloque de Evidencia en Texto</h3>
+              <textarea id="evidence-output" rows="10" readonly></textarea>
+              <button id="copy-evidence" class="btn-secondary">
+                Copiar evidencia
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
