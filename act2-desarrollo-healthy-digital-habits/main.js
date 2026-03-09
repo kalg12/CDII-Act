@@ -10,96 +10,108 @@ const CAREERS = [
 const SCENARIOS = [
     {
         category: "environmental",
-        categoryLabel: "🌱 Environmental",
+        categoryLabel: "🌱 Ambiental",
         sentence: "To reduce my digital carbon footprint, I _______ turn off my monitor when not in use.",
+        translation: "Para reducir mi huella digital de carbono, yo _______ apago mi monitor cuando no lo uso.",
         correctAnswer: "always",
         options: ["always", "never", "sometimes"],
         effect: { air: 10, digital: 5, energy: 10 }
     },
     {
         category: "digital",
-        categoryLabel: "💻 Digital Health",
+        categoryLabel: "💻 Salud Digital",
         sentence: "I _______ take breaks from screen time to protect my eyes.",
+        translation: "Yo _______ tomo descansos de la pantalla para proteger mis ojos.",
         correctAnswer: "always",
         options: ["never", "always", "sometimes"],
         effect: { air: 0, digital: 10, energy: 0 }
     },
     {
         category: "environmental",
-        categoryLabel: "🌱 Environmental",
-        sentence: "At CETMAR, we _______ plant trees to improve air quality.",
-        correctAnswer: "always",
-        options: ["never", "sometimes", "always"],
+        categoryLabel: "🌱 Ambiental",
+        sentence: "At CETMAR, we _______ do cleanup activities to help the environment.",
+        translation: "En CETMAR, _______ hacemos actividades de limpieza para ayudar al medio ambiente.",
+        correctAnswer: "sometimes",
+        options: ["always", "never", "sometimes"],
         effect: { air: 10, digital: 0, energy: 0 }
     },
     {
         category: "digital",
-        categoryLabel: "💻 Digital Health",
+        categoryLabel: "💻 Salud Digital",
         sentence: "I _______ use blue light filters when working at night.",
+        translation: "Yo _______ uso filtros de luz azul cuando trabajo de noche.",
         correctAnswer: "usually",
         options: ["never", "usually", "always"],
         effect: { air: 0, digital: 8, energy: 0 }
     },
     {
         category: "energy",
-        categoryLabel: "⚡ Energy",
+        categoryLabel: "⚡ Energía",
         sentence: "I _______ unplug devices when not in use to save energy.",
+        translation: "Yo _______ desconecto los dispositivos cuando no los uso para ahorrar energía.",
         correctAnswer: "usually",
         options: ["sometimes", "always", "usually"],
         effect: { air: 5, digital: 0, energy: 10 }
     },
     {
         category: "environmental",
-        categoryLabel: "🌱 Environmental",
+        categoryLabel: "🌱 Ambiental",
         sentence: "Students _______ recycle paper at CETMAR to reduce waste.",
+        translation: "Los estudiantes _______ recyclean papel en CETMAR para reducir residuos.",
         correctAnswer: "sometimes",
         options: ["always", "never", "sometimes"],
         effect: { air: 8, digital: 0, energy: 0 }
     },
     {
         category: "digital",
-        categoryLabel: "💻 Digital Health",
+        categoryLabel: "💻 Salud Digital",
         sentence: "I _______ organize my digital files to reduce energy consumption.",
+        translation: "Yo _______ organizo mis archivos digitales para reducir el consumo de energía.",
         correctAnswer: "sometimes",
         options: ["never", "always", "sometimes"],
         effect: { air: 0, digital: 5, energy: 8 }
     },
     {
         category: "energy",
-        categoryLabel: "⚡ Energy",
+        categoryLabel: "⚡ Energía",
         sentence: "I _______ use sleep mode on my computer to save electricity.",
+        translation: "Yo _______ uso el modo de suspensión en mi computadora para ahorrar electricidad.",
         correctAnswer: "always",
         options: ["sometimes", "never", "always"],
         effect: { air: 0, digital: 0, energy: 10 }
     },
     {
         category: "environmental",
-        categoryLabel: "🌱 Environmental",
+        categoryLabel: "🌱 Ambiental",
         sentence: "We _______ use reusable containers instead of plastic at school.",
-        correctAnswer: "usually",
+        translation: "Nosotros _______ usamos recipientes reutilizables en lugar de plástico en la escuela.",
+        correctAnswer: "sometimes",
         options: ["never", "usually", "sometimes"],
         effect: { air: 8, digital: 0, energy: 0 }
     },
     {
         category: "digital",
-        categoryLabel: "💻 Digital Health",
+        categoryLabel: "💻 Salud Digital",
         sentence: "I _______ back up my files to reduce digital waste.",
+        translation: "Yo _______ hago respaldo de mis archivos para reducir el desperdicio digital.",
         correctAnswer: "sometimes",
         options: ["always", "never", "sometimes"],
         effect: { air: 0, digital: 8, energy: 0 }
     },
     {
         category: "energy",
-        categoryLabel: "⚡ Energy",
+        categoryLabel: "⚡ Energía",
         sentence: "I _______ adjust screen brightness to save energy.",
+        translation: "Yo _______ ajusto el brillo de la pantalla para ahorrar energía.",
         correctAnswer: "usually",
         options: ["never", "always", "usually"],
         effect: { air: 0, digital: 5, energy: 10 }
     },
     {
         category: "environmental",
-        categoryLabel: "🌱 Environmental",
+        categoryLabel: "🌱 Ambiental",
         sentence: "At CETMAR, we _______ turn off lights when leaving classrooms.",
+        translation: "En CETMAR, _______ apagamos las luces al salir de las aulas.",
         correctAnswer: "always",
         options: ["sometimes", "never", "always"],
         effect: { air: 10, digital: 0, energy: 10 }
@@ -107,10 +119,10 @@ const SCENARIOS = [
 ];
 
 const FREQUENCY_INFO = {
-    "always": { meaning: "100% of the time / Siempre", percentage: 100 },
-    "usually": { meaning: "Most of the time / La mayoría del tiempo", percentage: 75 },
-    "sometimes": { meaning: "Occasionally / Algunas veces", percentage: 50 },
-    "never": { meaning: "0% of the time / Nunca", percentage: 0 }
+    "always": { meaning: "Siempre - 100% del tiempo", translation: "100% of the time" },
+    "usually": { meaning: "Usualmente - La mayoría del tiempo", translation: "Most of the time" },
+    "sometimes": { meaning: "A veces - Ocasionalmente", translation: "Sometimes - Occasionally" },
+    "never": { meaning: "Nunca - 0% del tiempo", translation: "0% of the time" }
 };
 
 let studentData = {
@@ -126,6 +138,11 @@ let studentData = {
         energy: 50
     }
 };
+
+function toggleFrequencyHelp() {
+    const helpContent = document.getElementById('frequency-help-content');
+    helpContent.classList.toggle('show');
+}
 
 function populateCareers() {
     const select = document.getElementById('career');
@@ -189,14 +206,14 @@ function handleFormSubmit(e) {
 
 function renderScenario() {
     const scenario = SCENARIOS[studentData.currentQuestion];
+    const hasAnswered = studentData.answers[studentData.currentQuestion] !== undefined;
     
     document.getElementById('scenario-number').textContent = `Desafío #${studentData.currentQuestion + 1}`;
     document.getElementById('scenario-category').textContent = scenario.categoryLabel;
-    document.getElementById('scenario-text').textContent = scenario.sentence;
     
-    const wordToComplete = "_______";
-    const parts = scenario.sentence.split(wordToComplete);
-    document.getElementById('sentence-start').textContent = parts[0].trim();
+    const sentenceWithBlank = scenario.sentence.replace("_______", "__________");
+    document.getElementById('scenario-text').innerHTML = `<strong>${sentenceWithBlank}</strong>`;
+    document.getElementById('scenario-translation').textContent = scenario.translation;
     
     const progress = ((studentData.currentQuestion + 1) / SCENARIOS.length) * 100;
     document.getElementById('progress').style.width = `${progress}%`;
@@ -211,16 +228,9 @@ function renderScenario() {
         const optionEl = document.createElement('div');
         optionEl.className = 'frequency-option';
         optionEl.textContent = option.charAt(0).toUpperCase() + option.slice(1);
-        optionEl.onclick = () => selectOption(option);
         
-        if (studentData.answers[studentData.currentQuestion]) {
-            const selected = studentData.answers[studentData.currentQuestion];
-            if (selected.selected === option) {
-                optionEl.classList.add('selected');
-            }
-            if (option === scenario.correctAnswer) {
-                optionEl.classList.add('correct-answer');
-            }
+        if (!hasAnswered) {
+            optionEl.onclick = () => selectOption(option);
         }
         
         optionsContainer.appendChild(optionEl);
@@ -250,7 +260,13 @@ function selectOption(selectedOption) {
     }
     
     updateMeters();
-    renderScenario();
+    
+    if (studentData.currentQuestion < SCENARIOS.length - 1) {
+        studentData.currentQuestion++;
+        renderScenario();
+    } else {
+        showResults();
+    }
 }
 
 function updateNavigation() {

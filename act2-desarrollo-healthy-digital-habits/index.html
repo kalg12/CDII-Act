@@ -96,19 +96,28 @@
                     <div class="card scenario-card">
                         <div class="scenario-header">
                             <span class="scenario-number" id="scenario-number">Desafío #1</span>
-                            <span class="scenario-category" id="scenario-category">🏭 Environmental</span>
+                            <span class="scenario-category" id="scenario-category">🏭 Ambiental</span>
                         </div>
                         <div class="scenario-content">
                             <p id="scenario-text"></p>
+                            <p id="scenario-translation" class="scenario-translation"></p>
                         </div>
                         <div class="grammar-hint">
-                            <span>📝 Complete with:</span>
-                            <span id="sentence-start"></span>
+                            <span>📝 Completa la oración:</span>
+                        </div>
+                        <div class="frequency-help">
+                            <span class="help-toggle" onclick="toggleFrequencyHelp()">ℹ️ Ver ayuda de adverbios</span>
+                            <div id="frequency-help-content" class="frequency-help-content">
+                                <div class="freq-item"><strong>Always</strong> = Siempre (100%)</div>
+                                <div class="freq-item"><strong>Usually</strong> = Usualmente (75%)</div>
+                                <div class="freq-item"><strong>Sometimes</strong> = A veces (50%)</div>
+                                <div class="freq-item"><strong>Never</strong> = Nunca (0%)</div>
+                            </div>
                         </div>
                         <div id="options-container" class="options-grid"></div>
                     </div>
 
-                    <div class="navigation">
+                    <div class="navigation" style="display: none;">
                         <button id="prev-btn" class="btn-secondary" disabled>← Anterior</button>
                         <button id="next-btn" class="btn-primary" disabled>Siguiente →</button>
                     </div>
