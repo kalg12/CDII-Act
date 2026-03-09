@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 2 - Healthy Digital Habits</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">🌱</div>
+            <h1>Healthy Digital Habits</h1>
+            <p class="subtitle">Desafío Interactivo - CETMAR 18</p>
+        </header>
+
+        <main id="app">
+            <!-- Paso 1: Datos del estudiante -->
+            <section id="step-1" class="step active">
+                <div class="card">
+                    <h2>📝 Datos del Estudiante</h2>
+                    <form id="student-form">
+                        <div class="form-group">
+                            <label for="name">Nombre(s)</label>
+                            <input type="text" id="name" required placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Apellidos</label>
+                            <input type="text" id="lastname" required placeholder="Tus apellidos">
+                        </div>
+                        <div class="form-group">
+                            <label for="career">Carrera</label>
+                            <select id="career" required>
+                                <option value="">Selecciona tu carrera</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="group">Grupo</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="group" value="A" required>
+                                    <span class="radio-custom"></span>
+                                    Grupo A
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="group" value="B" required>
+                                    <span class="radio-custom"></span>
+                                    Grupo B
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Comenzar el Desafío →</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Paso 2: Tablero de Control -->
+            <section id="step-2" class="step">
+                <div class="dashboard">
+                    <div class="status-panel">
+                        <div class="meter-container">
+                            <div class="meter-label">
+                                <span>🌬️ Air Quality CETMAR</span>
+                                <span id="air-value">50%</span>
+                            </div>
+                            <div class="meter">
+                                <div class="meter-fill" id="air-meter"></div>
+                            </div>
+                        </div>
+                        <div class="meter-container">
+                            <div class="meter-label">
+                                <span>💻 Digital Health</span>
+                                <span id="digital-value">50%</span>
+                            </div>
+                            <div class="meter">
+                                <div class="meter-fill" id="digital-meter"></div>
+                            </div>
+                        </div>
+                        <div class="meter-container">
+                            <div class="meter-label">
+                                <span>⚡ Energy Consumption</span>
+                                <span id="energy-value">50%</span>
+                            </div>
+                            <div class="meter">
+                                <div class="meter-fill" id="energy-meter"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">Desafío 1 de 12</span>
+
+                    <div class="card scenario-card">
+                        <div class="scenario-header">
+                            <span class="scenario-number" id="scenario-number">Desafío #1</span>
+                            <span class="scenario-category" id="scenario-category">🏭 Environmental</span>
+                        </div>
+                        <div class="scenario-content">
+                            <p id="scenario-text"></p>
+                        </div>
+                        <div class="grammar-hint">
+                            <span>📝 Complete with:</span>
+                            <span id="sentence-start"></span>
+                        </div>
+                        <div id="options-container" class="options-grid"></div>
+                    </div>
+
+                    <div class="navigation">
+                        <button id="prev-btn" class="btn-secondary" disabled>← Anterior</button>
+                        <button id="next-btn" class="btn-primary" disabled>Siguiente →</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Paso 3: Resultados -->
+            <section id="step-3" class="step">
+                <div class="card results-card">
+                    <div class="final-dashboard">
+                        <h2>🎮 Resultados Finales</h2>
+                        <p id="student-name" class="result-name"></p>
+                        
+                        <div class="final-meters">
+                            <div class="final-meter-item">
+                                <span class="final-meter-icon">🌬️</span>
+                                <span class="final-meter-label">Air Quality</span>
+                                <div class="final-meter-bar">
+                                    <div class="final-meter-fill" id="final-air"></div>
+                                </div>
+                                <span class="final-meter-value" id="final-air-value">0%</span>
+                            </div>
+                            <div class="final-meter-item">
+                                <span class="final-meter-icon">💻</span>
+                                <span class="final-meter-label">Digital Health</span>
+                                <div class="final-meter-bar">
+                                    <div class="final-meter-fill" id="final-digital"></div>
+                                </div>
+                                <span class="final-meter-value" id="final-digital-value">0%</span>
+                            </div>
+                            <div class="final-meter-item">
+                                <span class="final-meter-icon">⚡</span>
+                                <span class="final-meter-label">Energy</span>
+                                <div class="final-meter-bar">
+                                    <div class="final-meter-fill" id="final-energy"></div>
+                                </div>
+                                <span class="final-meter-value" id="final-energy-value">0%</span>
+                            </div>
+                        </div>
+
+                        <div class="feedback-section" id="feedback-section">
+                            <h3>📊 Análisis de Hábitos</h3>
+                            <div id="feedback-content"></div>
+                        </div>
+
+                        <div class="score-display">
+                            <div class="score-circle">
+                                <span id="score-text">0%</span>
+                            </div>
+                            <p>Puntuación Total</p>
+                        </div>
+
+                        <div class="achievements" id="achievements"></div>
+
+                        <button id="restart-btn" class="btn-secondary">🔄 Nuevo Intento</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Segundo Semestre - Cultura Digital | Transversalidad: Inglés</p>
+        </footer>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
