@@ -29,8 +29,8 @@ const SCENARIOS = [
     {
         category: "environmental",
         categoryLabel: "🌱 Ambiental",
-        sentence: "At CETMAR, we _______ do cleanup activities to help the environment.",
-        translation: "En CETMAR, _______ hacemos actividades de limpieza para ayudar al medio ambiente.",
+        sentence: "At CETMAR, we sometimes do cleanup activities to help the environment.",
+        translation: "En CETMAR, a veces hacemos actividades de limpieza para ayudar al medio ambiente.",
         correctAnswer: "sometimes",
         options: ["always", "never", "sometimes"],
         effect: { air: 10, digital: 0, energy: 0 }
@@ -56,8 +56,8 @@ const SCENARIOS = [
     {
         category: "environmental",
         categoryLabel: "🌱 Ambiental",
-        sentence: "Students _______ recycle paper at CETMAR to reduce waste.",
-        translation: "Los estudiantes _______ recyclean papel en CETMAR para reducir residuos.",
+        sentence: "Students at CETMAR _______ recycle paper to reduce waste.",
+        translation: "Los estudiantes de CETMAR _______ recyclean papel para reducir residuos.",
         correctAnswer: "sometimes",
         options: ["always", "never", "sometimes"],
         effect: { air: 8, digital: 0, energy: 0 }
@@ -110,8 +110,8 @@ const SCENARIOS = [
     {
         category: "environmental",
         categoryLabel: "🌱 Ambiental",
-        sentence: "At CETMAR, we _______ turn off lights when leaving classrooms.",
-        translation: "En CETMAR, _______ apagamos las luces al salir de las aulas.",
+        sentence: "At CETMAR, we always turn off lights when leaving classrooms.",
+        translation: "En CETMAR, siempre apagamos las luces al salir de las aulas.",
         correctAnswer: "always",
         options: ["sometimes", "never", "always"],
         effect: { air: 10, digital: 0, energy: 10 }
@@ -342,7 +342,7 @@ function showResults() {
     if (results.air >= 70) {
         feedbackHTML += `<p class="strength">🌬️ ¡Excelente! La calidad del aire en CETMAR está muy bien.</p>`;
     } else if (results.air >= 50) {
-        feedbackHTML += `<p class="improvement">🌬️ La calidad del aire necesita mejora. ¡Sigue effortando!</p>`;
+        feedbackHTML += `<p class="improvement">🌬️ La calidad del aire necesita mejora. ¡Sigue esforzando!</p>`;
     } else {
         feedbackHTML += `<p class="improvement">🌬️ Es importante tomar acciones para mejorar el aire.</p>`;
     }
