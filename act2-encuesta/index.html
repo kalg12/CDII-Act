@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico de Hábitos y Datos - Cultura Digital II</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">🎓</div>
+            <h1>Cultura Digital II</h1>
+            <p class="subtitle">Diagnóstico de Hábitos y Cultura Digital</p>
+        </header>
+
+        <main id="app">
+            <!-- Paso 1: Datos del estudiante -->
+            <section id="step-1" class="step active">
+                <div class="card">
+                    <h2>📝 Encuesta Diagnóstica - Hábitos y Cultura Digital</h2>
+                    <form id="student-form">
+                        <div class="form-group">
+                            <label for="name">Nombre(s)</label>
+                            <input type="text" id="name" required placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Apellidos</label>
+                            <input type="text" id="lastname" required placeholder="Tus apellidos">
+                        </div>
+                        <div class="form-group">
+                            <label for="career">Carrera</label>
+                            <select id="career" required>
+                                <option value="">Selecciona tu carrera</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="group">Grupo</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="group" value="A" required>
+                                    <span class="radio-custom"></span>
+                                    Grupo A
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="group" value="B" required>
+                                    <span class="radio-custom"></span>
+                                    Grupo B
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Continuar →</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Paso 2: Cuestionario -->
+            <section id="step-2" class="step">
+                <div class="card">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">Pregunta 1 de 15</span>
+                    
+                    <div class="question-container" id="question-container">
+                        <h3 id="question-text"></h3>
+                        <div id="options" class="options-grid"></div>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button id="prev-btn" class="btn-secondary" disabled>← Anterior</button>
+                        <button id="next-btn" class="btn-primary" disabled>Siguiente →</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Paso 3: Resultados y Feedback -->
+            <section id="step-3" class="step">
+                <div class="card results-card">
+                    <div class="score-circle" id="score-circle">
+                        <span id="score-text">0%</span>
+                    </div>
+                    <h2>🎯 Resultados del Diagnóstico</h2>
+                    <p id="student-name" class="result-name"></p>
+                    
+                    <div class="feedback-section" id="feedback-section">
+                        <h3>📊 Análisis Personalizado</h3>
+                        <div id="feedback-content"></div>
+                    </div>
+
+                    <div class="detailed-feedback" id="detailed-feedback"></div>
+
+                    <div class="instructions-box">
+                        <h3>📋 Indicaciones para la Evidencia</h3>
+                        <ol>
+                            <li>Al finalizar, redacta una <strong>reflexión breve</strong> sobre cómo la tecnología influye en tu toma de decisiones personales.</li>
+                            <li>Captura la evidencia en <strong>PDF</strong> y guárdala en tu cuenta de Google Drive.</li>
+                            <li>Genera un código <strong>QR</strong> para compartir tu documento.</li>
+                            <li>Comparte el código QR en el Foro: <strong>Diagnóstico de Cultura Digital</strong>.</li>
+                        </ol>
+                        <p class="time-note">⏱️ Duración: 40 minutos | Valor: 5%</p>
+                    </div>
+
+                    <button id="restart-btn" class="btn-secondary">🔄 Nuevo Intento</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Segundo Semestre - Cultura Digital</p>
+        </footer>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
