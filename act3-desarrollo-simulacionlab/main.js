@@ -475,8 +475,10 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("clear-results")
     .addEventListener("click", clearResults);
 
-  document.getElementById("copy-evidence").addEventListener("click", async () => {
-    await copyText(document.getElementById("evidence-output").value);
-    showEvidenceFeedback("Texto copiado correctamente.");
-  });
+  document
+    .getElementById("copy-evidence")
+    .addEventListener("click", async () => {
+      await copyText(document.getElementById("evidence-output").value);
+      showEvidenceFeedback("Texto copiado correctamente.");
+    });
 });
