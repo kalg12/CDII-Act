@@ -177,34 +177,6 @@ function createIntroMessage() {
     "Hola, equipo CETMAR 18. Bienvenidos al Simulador de Laboratorio Estadistico. Aqui tienen su base ficticia de 20 filas lista para copiar y analizar en el proyecto Respiramos lo que sembramos.";
 }
 
-function toCsv() {
-  const headers = [
-    "Estudiante",
-    "Horas_Uso_Celular",
-    "Nivel_Fatiga_1a10",
-    "Consumo_Energia_Apps_kWh",
-  ];
-  const lines = DATASET.map(
-    (row) =>
-      `${row.Estudiante},${row.Horas_Uso_Celular},${row.Nivel_Fatiga_1a10},${row.Consumo_Energia_Apps_kWh.toFixed(2)}`,
-  );
-  return [headers.join(","), ...lines].join("\n");
-}
-
-function toTsv() {
-  const headers = [
-    "Estudiante",
-    "Horas_Uso_Celular",
-    "Nivel_Fatiga_1a10",
-    "Consumo_Energia_Apps_kWh",
-  ];
-  const lines = DATASET.map(
-    (row) =>
-      `${row.Estudiante}\t${row.Horas_Uso_Celular}\t${row.Nivel_Fatiga_1a10}\t${row.Consumo_Energia_Apps_kWh.toFixed(2)}`,
-  );
-  return [headers.join("\t"), ...lines].join("\n");
-}
-
 function mean(values) {
   return values.reduce((acc, v) => acc + v, 0) / values.length;
 }
@@ -241,6 +213,65 @@ function mode(values) {
   return modes.join(", ");
 }
 
+function drawCentralTendencyChart(columnName, stats) {
+  const canvas = document.getElementById("chart-canvas");
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, w, h);
+
+  const media = Number(stats.Media);
+  const mediana = Number(stats.Mediana);
+  const modaRaw = String(stats.Moda).split(",")[0].trim();
+  const moda = Number(modaRaw);
+
+  const items = [
+    { label: "Media", value: media, color: "#0284c7" },
+    { label: "Mediana", value: mediana, color: "#0ea5e9" },
+    {
+      label: "Moda",
+      value: Number.isFinite(moda) ? moda : 0,
+      color: "#38bdf8",
+    },
+  ];
+
+  const maxVal = Math.max(...items.map((i) => i.value), 1);
+  const margin = 40;
+  const plotW = w - margin * 2;
+  const plotH = h - margin * 2;
+  const barWidth = 90;
+  const gap = (plotW - barWidth * items.length) / (items.length + 1);
+
+  ctx.strokeStyle = "#1e293b";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(margin, margin);
+  ctx.lineTo(margin, h - margin);
+  ctx.lineTo(w - margin, h - margin);
+  ctx.stroke();
+
+  ctx.fillStyle = "#0f172a";
+  ctx.font = "bold 14px Outfit";
+  ctx.fillText(`Grafico de barras - ${columnName}`, margin, 24);
+
+  items.forEach((item, index) => {
+    const x = margin + gap + index * (barWidth + gap);
+    const barH = (item.value / maxVal) * (plotH - 10);
+    const y = h - margin - barH;
+
+    ctx.fillStyle = item.color;
+    ctx.fillRect(x, y, barWidth, barH);
+
+    ctx.fillStyle = "#0f172a";
+    ctx.font = "13px Outfit";
+    ctx.fillText(item.label, x + 16, h - margin + 18);
+    ctx.fillText(item.value.toFixed(2), x + 10, y - 8);
+  });
+}
+
 function renderCentralTendency(columnName) {
   const values = DATASET.map((row) => row[columnName]);
   const stats = {
@@ -274,6 +305,8 @@ function renderCentralTendency(columnName) {
   addFinding(
     `Se calcularon medidas de tendencia central para ${columnName}: media ${media}, mediana ${mediana}, moda ${stats.Moda}.`,
   );
+
+  drawCentralTendencyChart(columnName, stats);
   updateEvidence();
 }
 
@@ -405,22 +438,6 @@ function copyText(text) {
   return navigator.clipboard.writeText(text);
 }
 
-function setCopyFeedback(message) {
-  document.getElementById("copy-feedback").textContent = message;
-}
-
-function downloadCsvFile() {
-  const blob = new Blob([toCsv()], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "simulacionlab_cetmar18_datos.csv";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   populateCareers();
 
@@ -428,31 +445,27 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("student-form")
     .addEventListener("submit", handleStart);
 
-  document.getElementById("copy-table").addEventListener("click", async () => {
-    await copyText(toTsv());
-    setCopyFeedback(
-      "Tabla copiada. Pegala directamente en Excel, Sheets o CryptPad.",
-    );
-  });
-
-  document.getElementById("download-csv").addEventListener("click", () => {
-    downloadCsvFile();
-    setCopyFeedback(
-      "Archivo CSV descargado. Puedes abrirlo con Excel o subirlo a Sheets.",
-    );
-  });
-
   document
     .getElementById("analyze-hours")
-    .addEventListener("click", () => renderCentralTendency("Horas_Uso_Celular"));
+    .addEventListener("click", () =>
+      renderCentralTendency("Horas_Uso_Celular"),
+    );
   document
     .getElementById("analyze-fatigue")
-    .addEventListener("click", () => renderCentralTendency("Nivel_Fatiga_1a10"));
+    .addEventListener("click", () =>
+      renderCentralTendency("Nivel_Fatiga_1a10"),
+    );
   document
     .getElementById("analyze-energy")
-    .addEventListener("click", () => renderCentralTendency("Consumo_Energia_Apps_kWh"));
-  document.getElementById("show-scatter").addEventListener("click", drawScatterPlot);
-  document.getElementById("clear-results").addEventListener("click", clearResults);
+    .addEventListener("click", () =>
+      renderCentralTendency("Consumo_Energia_Apps_kWh"),
+    );
+  document
+    .getElementById("show-scatter")
+    .addEventListener("click", drawScatterPlot);
+  document
+    .getElementById("clear-results")
+    .addEventListener("click", clearResults);
 
   document.getElementById("copy-evidence").addEventListener("click", () => {
     copyText(document.getElementById("evidence-output").value);

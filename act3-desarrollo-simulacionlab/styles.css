@@ -210,20 +210,6 @@ th {
   margin: 8px 0 0 20px;
 }
 
-.quick-actions {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.mini-feedback {
-  min-height: 22px;
-  font-size: 0.9rem;
-  color: #0f766e;
-  margin-top: 8px;
-}
-
 .action-grid {
   margin-top: 12px;
   display: grid;
