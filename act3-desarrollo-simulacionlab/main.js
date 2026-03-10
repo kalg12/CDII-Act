@@ -438,6 +438,14 @@ function copyText(text) {
   return navigator.clipboard.writeText(text);
 }
 
+function showEvidenceFeedback(message) {
+  const feedback = document.getElementById("evidence-feedback");
+  feedback.textContent = message;
+  setTimeout(() => {
+    feedback.textContent = "";
+  }, 2200);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   populateCareers();
 
@@ -467,7 +475,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("clear-results")
     .addEventListener("click", clearResults);
 
-  document.getElementById("copy-evidence").addEventListener("click", () => {
-    copyText(document.getElementById("evidence-output").value);
+  document.getElementById("copy-evidence").addEventListener("click", async () => {
+    await copyText(document.getElementById("evidence-output").value);
+    showEvidenceFeedback("Texto copiado correctamente.");
   });
 });

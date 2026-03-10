@@ -41,14 +41,18 @@
                 <option value="">Selecciona tu carrera</option>
               </select>
             </label>
-            <fieldset>
+            <fieldset class="group-fieldset">
               <legend>Grupo</legend>
-              <label class="inline-opt"
-                ><input type="radio" name="group" value="A" required /> A</label
-              >
-              <label class="inline-opt"
-                ><input type="radio" name="group" value="B" required /> B</label
-              >
+              <div class="group-options">
+                <label class="inline-opt"
+                  ><input type="radio" name="group" value="A" required />
+                  A</label
+                >
+                <label class="inline-opt"
+                  ><input type="radio" name="group" value="B" required />
+                  B</label
+                >
+              </div>
             </fieldset>
             <label class="full-width">
               Integrantes del equipo (uno por linea)
@@ -130,6 +134,7 @@
               <button id="copy-evidence" class="btn-secondary">
                 Copiar evidencia
               </button>
+              <p id="evidence-feedback" class="feedback-success"></p>
             </div>
           </div>
         </section>

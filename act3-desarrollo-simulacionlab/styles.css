@@ -108,10 +108,22 @@ fieldset {
   padding: 10px;
 }
 
+.group-fieldset {
+  gap: 8px;
+}
+
+.group-options {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
 .inline-opt {
   flex-direction: row;
   align-items: center;
   gap: 8px;
+  margin: 0;
 }
 
 input,
@@ -265,6 +277,14 @@ th {
 
 #evidence-output {
   min-height: 260px;
+}
+
+.feedback-success {
+  min-height: 22px;
+  margin-top: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #0f766e;
 }
 
 .muted {
