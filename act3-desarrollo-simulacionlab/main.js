@@ -133,9 +133,11 @@ const BASE_DATASET = [
 let studentInfo = null;
 const findings = [];
 let dataset = [];
+let recordNames = [];
 
-function resetDataset() {
-  dataset = BASE_DATASET.map((row) => ({ ...row }));
+function resetDataset(n) {
+  const count = n != null ? Math.max(0, 20 - n) : 20;
+  dataset = BASE_DATASET.slice(0, count).map((row) => ({ ...row }));
 }
 
 function getDataset() {
@@ -182,8 +184,9 @@ function renderDataset() {
 
 function createIntroMessage() {
   const intro = document.getElementById("intro-message");
-  intro.innerHTML =
-    "Hola, equipo CETMAR 18. Bienvenidos al Simulador de Laboratorio Estadistico. Aqui tienen su base ficticia de 20 filas lista para copiar y analizar en el proyecto Respiramos lo que sembramos.";
+  const n = studentInfo?.memberCount || 0;
+  const demoCount = 20 - n;
+  intro.innerHTML = `Hola, equipo CETMAR 18. Han registrado <strong>${n} integrante(s)</strong>. La base de referencia muestra <strong>${demoCount} filas ficticias</strong>. Completen la FASE 2 con sus datos reales para que el simulador pueda activar el analisis completo.`;
 }
 
 function mean(values) {
@@ -211,14 +214,15 @@ function estimateEnergyKwh(hours, fatigue) {
   return Math.max(0.12, Number(estimate.toFixed(2)));
 }
 
-function renderStudentRecordRows() {
+function renderStudentRecordRows(n) {
   const body = document.getElementById("student-records-body");
   body.innerHTML = "";
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= n; i++) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>R${i}</td>
+      <td>${i}</td>
+      <td><input class="mini-input row-name" type="text" data-row="${i}" /></td>
       <td><input class="mini-input row-hours" type="number" min="0" max="16" step="1" data-row="${i}" /></td>
       <td><input class="mini-input row-fatigue" type="number" min="1" max="10" step="1" data-row="${i}" /></td>
       <td><span class="auto-kwh" data-row="${i}">--</span></td>
@@ -228,8 +232,7 @@ function renderStudentRecordRows() {
 
   document.querySelectorAll(".row-hours, .row-fatigue").forEach((input) => {
     input.addEventListener("input", () => {
-      const row = input.dataset.row;
-      updateAutoKwhForRow(row);
+      updateAutoKwhForRow(input.dataset.row);
     });
   });
 }
@@ -257,15 +260,31 @@ function updateAutoKwhForRow(row) {
   out.textContent = estimateEnergyKwh(hours, fatigue).toFixed(2);
 }
 
+function setAnalysisEnabled(enabled) {
+  [
+    "analyze-hours",
+    "analyze-fatigue",
+    "analyze-energy",
+    "show-scatter",
+    "clear-results",
+  ].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (btn) btn.disabled = !enabled;
+  });
+  const hint = document.getElementById("locked-hint");
+  if (hint) hint.style.display = enabled ? "none" : "block";
+}
+
 function applyStudentRecords() {
+  const n = studentInfo?.memberCount || 1;
   const records = [];
+  const newNames = [];
 
-  const teamNames = studentInfo?.teamMembers?.filter(Boolean) || [];
-  const ownerName = studentInfo
-    ? `${studentInfo.name} ${studentInfo.lastname}`.trim()
-    : "Alumno";
-
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= n; i++) {
+    const nameVal =
+      (
+        document.querySelector(`.row-name[data-row="${i}"]`)?.value || ""
+      ).trim() || `Integrante ${i}`;
     const hours = Number(
       document.querySelector(`.row-hours[data-row="${i}"]`).value,
     );
@@ -280,32 +299,34 @@ function applyStudentRecords() {
       fatigue <= 0
     ) {
       document.getElementById("records-feedback").textContent =
-        "Completa correctamente los 5 registros para aplicar el ajuste automatico.";
+        `Completa correctamente los ${n} registros antes de activar el analisis.`;
       return;
     }
 
-    const studentLabel =
-      teamNames.length > 0
-        ? teamNames[(i - 1) % teamNames.length]
-        : `${ownerName} (R${i})`;
-
+    newNames.push(nameVal);
     records.push({
-      Estudiante: studentLabel,
+      Estudiante: nameVal,
       Horas_Uso_Celular: hours,
       Nivel_Fatiga_1a10: fatigue,
       Consumo_Energia_Apps_kWh: estimateEnergyKwh(hours, fatigue),
     });
   }
 
-  dataset = [...BASE_DATASET.map((row) => ({ ...row })), ...records];
+  const demoCount = 20 - n;
+  dataset = [
+    ...BASE_DATASET.slice(0, demoCount).map((row) => ({ ...row })),
+    ...records,
+  ];
+  recordNames = newNames;
   renderDataset();
   clearResults();
+  setAnalysisEnabled(true);
 
   document.getElementById("records-feedback").textContent =
-    "Se agregaron 5 registros y se ajusto automaticamente el consumo de energia (kWh).";
+    `Se registraron ${n} integrante(s). El analisis esta listo para ejecutarse.`;
 
   addFinding(
-    "Se capturaron 5 registros del alumno y se ajusto automaticamente el consumo de energia para integrarlos al analisis.",
+    `Se capturaron ${n} registros reales del equipo integrados con ${demoCount} datos de referencia.`,
   );
   updateEvidence();
 }
@@ -518,9 +539,9 @@ function updateEvidence() {
   const dateText = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
   const integrantes =
-    studentInfo.teamMembers.length > 0
-      ? studentInfo.teamMembers.join("; ")
-      : `${studentInfo.name} ${studentInfo.lastname}`;
+    recordNames.length > 0
+      ? recordNames.join("; ")
+      : `${studentInfo.name} ${studentInfo.lastname} (${studentInfo.memberCount || 1} integrante(s))`;
 
   const summary =
     findings.length > 0 ? findings.join(" ") : "Aun sin hallazgos registrados.";
@@ -544,22 +565,26 @@ function handleStart(e) {
   const lastname = document.getElementById("lastname").value.trim();
   const career = document.getElementById("career").value;
   const group = document.querySelector('input[name="group"]:checked').value;
-  const teamRaw = document.getElementById("team-members").value;
+  const memberCount = parseInt(
+    document.getElementById("member-count").value,
+    10,
+  );
 
   studentInfo = {
     name,
     lastname,
     career,
     group,
-    teamMembers: teamRaw
-      .split("\n")
-      .map((x) => x.trim())
-      .filter(Boolean),
+    memberCount,
   };
 
+  recordNames = [];
   showStep(2);
+  resetDataset(memberCount);
   createIntroMessage();
   renderDataset();
+  renderStudentRecordRows(memberCount);
+  setAnalysisEnabled(false);
   updateEvidence();
 }
 
@@ -576,9 +601,7 @@ function showEvidenceFeedback(message) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  resetDataset();
   populateCareers();
-  renderStudentRecordRows();
 
   document
     .getElementById("student-form")
