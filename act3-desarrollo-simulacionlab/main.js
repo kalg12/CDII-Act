@@ -7,6 +7,12 @@ const CAREERS = [
   "TECNICO LABORATORISTA AMBIENTAL",
 ];
 
+const COLUMN_LABELS = {
+  Horas_Uso_Celular: "Horas de uso del celular (por dia)",
+  Nivel_Fatiga_1a10: "Nivel de fatiga al terminar el dia (1 a 10)",
+  Consumo_Energia_Apps_kWh: "Consumo de energia en apps (kWh/dia)",
+};
+
 const BASE_DATASET = [
   {
     Estudiante: "Est_01",
@@ -405,7 +411,7 @@ function drawCentralTendencyChart(columnName, stats) {
 
   ctx.fillStyle = "#0f172a";
   ctx.font = "bold 14px Outfit";
-  ctx.fillText(`Grafico de barras - ${columnName}`, margin, 24);
+  ctx.fillText(`Grafico de barras - ${COLUMN_LABELS[columnName] || columnName}`, margin, 24);
 
   items.forEach((item, index) => {
     const x = margin + gap + index * (barWidth + gap);
@@ -438,8 +444,10 @@ function renderCentralTendency(columnName) {
       : stats.Mediana;
 
   const resultArea = document.getElementById("result-area");
+  const label = COLUMN_LABELS[columnName] || columnName;
   resultArea.innerHTML = `
-    <h3>Resultados: Tendencia Central (${columnName})</h3>
+    <h3>Resultados: Tendencia Central</h3>
+    <p class="muted">${label}</p>
     <table class="result-table">
       <thead>
         <tr><th>Medida</th><th>Valor</th></tr>
@@ -453,7 +461,7 @@ function renderCentralTendency(columnName) {
   `;
 
   addFinding(
-    `Se calcularon medidas de tendencia central para ${columnName}: media ${media}, mediana ${mediana}, moda ${stats.Moda}.`,
+    `Se calcularon medidas de tendencia central para ${COLUMN_LABELS[columnName] || columnName}: media ${media}, mediana ${mediana}, moda ${stats.Moda}.`,
   );
 
   drawCentralTendencyChart(columnName, stats);
@@ -484,11 +492,11 @@ function drawScatterPlot() {
 
   ctx.fillStyle = "#1e293b";
   ctx.font = "13px Outfit";
-  ctx.fillText("Horas_Uso_Celular", w / 2 - 60, h - 10);
+  ctx.fillText("Horas de uso del celular (por dia)", w / 2 - 90, h - 10);
   ctx.save();
-  ctx.translate(10, h / 2 + 50);
+  ctx.translate(10, h / 2 + 70);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillText("Nivel_Fatiga_1a10", 0, 0);
+  ctx.fillText("Fatiga al final del dia (1-10)", 0, 0);
   ctx.restore();
 
   const xValues = getDataset().map((d) => d.Horas_Uso_Celular);
@@ -513,12 +521,12 @@ function drawScatterPlot() {
 
   const resultArea = document.getElementById("result-area");
   resultArea.innerHTML = `
-    <h3>Grafico de Dispersion: Horas de Uso vs Fatiga</h3>
-    <p>Descripcion: Se observa una tendencia positiva; a mayor uso del celular, mayor nivel de fatiga reportado en el grupo ficticio.</p>
+    <h3>Grafico de Dispersion: Horas de uso por dia vs Nivel de fatiga</h3>
+    <p>Descripcion: Se observa una tendencia positiva; a mayor cantidad de horas diarias de uso del celular, mayor nivel de fatiga reportado al terminar el dia.</p>
   `;
 
   addFinding(
-    "Se genero grafico de dispersion entre Horas_Uso_Celular y Nivel_Fatiga_1a10 con tendencia positiva.",
+    "Se genero grafico de dispersion entre horas de uso diario del celular y nivel de fatiga al final del dia, con tendencia positiva.",
   );
   updateEvidence();
 }

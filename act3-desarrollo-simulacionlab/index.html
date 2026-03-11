@@ -73,9 +73,9 @@
                 <thead>
                   <tr>
                     <th>Estudiante</th>
-                    <th>Horas_Uso_Celular</th>
-                    <th>Nivel_Fatiga_1a10</th>
-                    <th>Consumo_Energia_Apps_kWh</th>
+                    <th>Horas de uso del celular (por día)</th>
+                    <th>Nivel de fatiga al terminar el día (1 a 10)</th>
+                    <th>Consumo de energía en apps (kWh/día)</th>
                   </tr>
                 </thead>
                 <tbody id="dataset-body"></tbody>
@@ -86,11 +86,10 @@
           <div class="phase phase-2">
             <h2>FASE 2: Captura de Datos Reales</h2>
             <p class="muted">
-              Ingresa los datos de cada integrante. El consumo de energia se
-              estima automaticamente.
-              <strong
-                >Debes completar esta fase para activar el analisis.</strong
-              >
+              Para cada integrante, ingresa:
+              <strong>cuantas horas al día usa el celular</strong> y
+              <strong>su nivel de fatiga al terminar el día (escala 1 a 10)</strong>.
+              El consumo de energia en apps (kWh/día) se calcula automaticamente.
             </p>
             <div class="records-required-notice">
               Requerido para activar el analisis
@@ -101,9 +100,9 @@
                   <tr>
                     <th>#</th>
                     <th>Nombre del integrante</th>
-                    <th>Horas_Uso_Celular</th>
-                    <th>Nivel_Fatiga_1a10</th>
-                    <th>Consumo_Energia_Apps_kWh (auto)</th>
+                    <th>Horas de uso por día</th>
+                    <th>Fatiga al terminar el día (1–10)</th>
+                    <th>Consumo kWh/día (auto)</th>
                   </tr>
                 </thead>
                 <tbody id="student-records-body"></tbody>
@@ -122,16 +121,16 @@
             </p>
             <div class="action-grid">
               <button id="analyze-hours" class="btn-primary" disabled>
-                Tendencia central: Horas de uso
+                Tendencia central: Horas de uso por día
               </button>
               <button id="analyze-fatigue" class="btn-primary" disabled>
-                Tendencia central: Fatiga
+                Tendencia central: Fatiga al final del día
               </button>
               <button id="analyze-energy" class="btn-primary" disabled>
-                Tendencia central: Consumo de energia
+                Tendencia central: Consumo kWh/día
               </button>
               <button id="show-scatter" class="btn-primary" disabled>
-                Graficar dispersion Horas vs Fatiga
+                Dispersion: Horas/día vs Nivel de fatiga
               </button>
               <button id="clear-results" class="btn-ghost" disabled>
                 Limpiar resultados
