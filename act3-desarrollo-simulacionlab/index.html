@@ -128,6 +128,31 @@
               <canvas id="chart-canvas" width="680" height="320"></canvas>
             </div>
 
+            <div class="records-card">
+              <h3>Captura Final: 5 Registros del Alumno</h3>
+              <p class="muted">
+                Ingresa Horas de uso y Nivel de fatiga. El consumo de energia
+                se ajusta automaticamente en kWh estimado.
+              </p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Registro</th>
+                      <th>Horas_Uso_Celular</th>
+                      <th>Nivel_Fatiga_1a10</th>
+                      <th>Consumo_Energia_Apps_kWh (auto)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="student-records-body"></tbody>
+                </table>
+              </div>
+              <button id="apply-records" class="btn-primary">
+                Aplicar 5 registros al analisis
+              </button>
+              <p id="records-feedback" class="feedback-success"></p>
+            </div>
+
             <div class="evidence-card">
               <h3>Bloque de Evidencia en Texto</h3>
               <textarea id="evidence-output" rows="10" readonly></textarea>

@@ -7,7 +7,7 @@ const CAREERS = [
   "TECNICO LABORATORISTA AMBIENTAL",
 ];
 
-const DATASET = [
+const BASE_DATASET = [
   {
     Estudiante: "Est_01",
     Horas_Uso_Celular: 2,
@@ -132,6 +132,15 @@ const DATASET = [
 
 let studentInfo = null;
 const findings = [];
+let dataset = [];
+
+function resetDataset() {
+  dataset = BASE_DATASET.map((row) => ({ ...row }));
+}
+
+function getDataset() {
+  return dataset;
+}
 
 function addFinding(text) {
   if (!findings.includes(text)) {
@@ -159,7 +168,7 @@ function showStep(stepNumber) {
 function renderDataset() {
   const body = document.getElementById("dataset-body");
   body.innerHTML = "";
-  DATASET.forEach((row) => {
+  getDataset().forEach((row) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${row.Estudiante}</td>
@@ -179,6 +188,104 @@ function createIntroMessage() {
 
 function mean(values) {
   return values.reduce((acc, v) => acc + v, 0) / values.length;
+}
+
+function estimateEnergyKwh(hours, fatigue) {
+  const x = BASE_DATASET.map((r) => r.Horas_Uso_Celular);
+  const y = BASE_DATASET.map((r) => r.Consumo_Energia_Apps_kWh);
+  const xMean = mean(x);
+  const yMean = mean(y);
+
+  let num = 0;
+  let den = 0;
+  for (let i = 0; i < x.length; i++) {
+    num += (x[i] - xMean) * (y[i] - yMean);
+    den += (x[i] - xMean) ** 2;
+  }
+
+  const slope = den === 0 ? 0 : num / den;
+  const intercept = yMean - slope * xMean;
+  const fatigueAdjust = (fatigue - 5) * 0.008;
+  const estimate = intercept + slope * hours + fatigueAdjust;
+
+  return Math.max(0.12, Number(estimate.toFixed(2)));
+}
+
+function renderStudentRecordRows() {
+  const body = document.getElementById("student-records-body");
+  body.innerHTML = "";
+
+  for (let i = 1; i <= 5; i++) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>R${i}</td>
+      <td><input class="mini-input row-hours" type="number" min="0" max="16" step="1" data-row="${i}" /></td>
+      <td><input class="mini-input row-fatigue" type="number" min="1" max="10" step="1" data-row="${i}" /></td>
+      <td><span class="auto-kwh" data-row="${i}">--</span></td>
+    `;
+    body.appendChild(tr);
+  }
+
+  document.querySelectorAll(".row-hours, .row-fatigue").forEach((input) => {
+    input.addEventListener("input", () => {
+      const row = input.dataset.row;
+      updateAutoKwhForRow(row);
+    });
+  });
+}
+
+function updateAutoKwhForRow(row) {
+  const hoursInput = document.querySelector(`.row-hours[data-row="${row}"]`);
+  const fatigueInput = document.querySelector(`.row-fatigue[data-row="${row}"]`);
+  const out = document.querySelector(`.auto-kwh[data-row="${row}"]`);
+
+  const hours = Number(hoursInput.value);
+  const fatigue = Number(fatigueInput.value);
+
+  if (!Number.isFinite(hours) || !Number.isFinite(fatigue) || hours <= 0 || fatigue <= 0) {
+    out.textContent = "--";
+    return;
+  }
+
+  out.textContent = estimateEnergyKwh(hours, fatigue).toFixed(2);
+}
+
+function applyStudentRecords() {
+  const records = [];
+
+  for (let i = 1; i <= 5; i++) {
+    const hours = Number(
+      document.querySelector(`.row-hours[data-row="${i}"]`).value,
+    );
+    const fatigue = Number(
+      document.querySelector(`.row-fatigue[data-row="${i}"]`).value,
+    );
+
+    if (!Number.isFinite(hours) || !Number.isFinite(fatigue) || hours <= 0 || fatigue <= 0) {
+      document.getElementById("records-feedback").textContent =
+        "Completa correctamente los 5 registros para aplicar el ajuste automatico.";
+      return;
+    }
+
+    records.push({
+      Estudiante: `Alumno_${String(i).padStart(2, "0")}`,
+      Horas_Uso_Celular: hours,
+      Nivel_Fatiga_1a10: fatigue,
+      Consumo_Energia_Apps_kWh: estimateEnergyKwh(hours, fatigue),
+    });
+  }
+
+  dataset = [...BASE_DATASET.map((row) => ({ ...row })), ...records];
+  renderDataset();
+  clearResults();
+
+  document.getElementById("records-feedback").textContent =
+    "Se agregaron 5 registros y se ajusto automaticamente el consumo de energia (kWh).";
+
+  addFinding(
+    "Se capturaron 5 registros del alumno y se ajusto automaticamente el consumo de energia para integrarlos al analisis.",
+  );
+  updateEvidence();
 }
 
 function median(values) {
@@ -273,7 +380,7 @@ function drawCentralTendencyChart(columnName, stats) {
 }
 
 function renderCentralTendency(columnName) {
-  const values = DATASET.map((row) => row[columnName]);
+  const values = getDataset().map((row) => row[columnName]);
   const stats = {
     Media: mean(values),
     Mediana: median(values),
@@ -341,14 +448,14 @@ function drawScatterPlot() {
   ctx.fillText("Nivel_Fatiga_1a10", 0, 0);
   ctx.restore();
 
-  const xValues = DATASET.map((d) => d.Horas_Uso_Celular);
-  const yValues = DATASET.map((d) => d.Nivel_Fatiga_1a10);
+  const xValues = getDataset().map((d) => d.Horas_Uso_Celular);
+  const yValues = getDataset().map((d) => d.Nivel_Fatiga_1a10);
   const xMin = Math.min(...xValues);
   const xMax = Math.max(...xValues);
   const yMin = Math.min(...yValues);
   const yMax = Math.max(...yValues);
 
-  DATASET.forEach((row) => {
+  getDataset().forEach((row) => {
     const x = margin + ((row.Horas_Uso_Celular - xMin) / (xMax - xMin)) * plotW;
     const y =
       h - margin - ((row.Nivel_Fatiga_1a10 - yMin) / (yMax - yMin)) * plotH;
@@ -447,7 +554,9 @@ function showEvidenceFeedback(message) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  resetDataset();
   populateCareers();
+  renderStudentRecordRows();
 
   document
     .getElementById("student-form")
@@ -474,6 +583,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("clear-results")
     .addEventListener("click", clearResults);
+
+  document
+    .getElementById("apply-records")
+    .addEventListener("click", applyStudentRecords);
 
   document
     .getElementById("copy-evidence")
