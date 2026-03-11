@@ -411,7 +411,11 @@ function drawCentralTendencyChart(columnName, stats) {
 
   ctx.fillStyle = "#0f172a";
   ctx.font = "bold 14px Outfit";
-  ctx.fillText(`Grafico de barras - ${COLUMN_LABELS[columnName] || columnName}`, margin, 24);
+  ctx.fillText(
+    `Grafico de barras - ${COLUMN_LABELS[columnName] || columnName}`,
+    margin,
+    24,
+  );
 
   items.forEach((item, index) => {
     const x = margin + gap + index * (barWidth + gap);
