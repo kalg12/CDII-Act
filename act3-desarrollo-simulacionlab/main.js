@@ -236,13 +236,20 @@ function renderStudentRecordRows() {
 
 function updateAutoKwhForRow(row) {
   const hoursInput = document.querySelector(`.row-hours[data-row="${row}"]`);
-  const fatigueInput = document.querySelector(`.row-fatigue[data-row="${row}"]`);
+  const fatigueInput = document.querySelector(
+    `.row-fatigue[data-row="${row}"]`,
+  );
   const out = document.querySelector(`.auto-kwh[data-row="${row}"]`);
 
   const hours = Number(hoursInput.value);
   const fatigue = Number(fatigueInput.value);
 
-  if (!Number.isFinite(hours) || !Number.isFinite(fatigue) || hours <= 0 || fatigue <= 0) {
+  if (
+    !Number.isFinite(hours) ||
+    !Number.isFinite(fatigue) ||
+    hours <= 0 ||
+    fatigue <= 0
+  ) {
     out.textContent = "--";
     return;
   }
@@ -253,6 +260,11 @@ function updateAutoKwhForRow(row) {
 function applyStudentRecords() {
   const records = [];
 
+  const teamNames = studentInfo?.teamMembers?.filter(Boolean) || [];
+  const ownerName = studentInfo
+    ? `${studentInfo.name} ${studentInfo.lastname}`.trim()
+    : "Alumno";
+
   for (let i = 1; i <= 5; i++) {
     const hours = Number(
       document.querySelector(`.row-hours[data-row="${i}"]`).value,
@@ -261,14 +273,24 @@ function applyStudentRecords() {
       document.querySelector(`.row-fatigue[data-row="${i}"]`).value,
     );
 
-    if (!Number.isFinite(hours) || !Number.isFinite(fatigue) || hours <= 0 || fatigue <= 0) {
+    if (
+      !Number.isFinite(hours) ||
+      !Number.isFinite(fatigue) ||
+      hours <= 0 ||
+      fatigue <= 0
+    ) {
       document.getElementById("records-feedback").textContent =
         "Completa correctamente los 5 registros para aplicar el ajuste automatico.";
       return;
     }
 
+    const studentLabel =
+      teamNames.length > 0
+        ? teamNames[(i - 1) % teamNames.length]
+        : `${ownerName} (R${i})`;
+
     records.push({
-      Estudiante: `Alumno_${String(i).padStart(2, "0")}`,
+      Estudiante: studentLabel,
       Horas_Uso_Celular: hours,
       Nivel_Fatiga_1a10: fatigue,
       Consumo_Energia_Apps_kWh: estimateEnergyKwh(hours, fatigue),
