@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Misión: Investigación Digital</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero__content">
+          <p class="eyebrow">Actividad interactiva en navegador</p>
+          <h1>Misión: investigar la convivencia digital</h1>
+          <p class="hero__text">
+            En la preparatoria han aparecido memes, indirectas y comentarios en
+            redes sociales que a veces parecen bromas, pero pueden generar
+            presión, burla o exclusión.
+          </p>
+          <div class="hero__chips">
+            <span class="chip"
+              ><strong>Técnica:</strong> análisis de contenido en línea</span
+            >
+            <span class="chip"
+              ><strong>Pregunta guía:</strong> ¿Qué revelan los contenidos
+              digitales sobre la convivencia entre estudiantes?</span
+            >
+          </div>
+        </div>
+      </header>
+
+      <main class="container">
+        <section class="status-panel card">
+          <div class="status-panel__top">
+            <div>
+              <h2>Tu avance</h2>
+              <p>
+                Ve completando las misiones en orden. Cada fase se desbloquea
+                cuando terminas la anterior.
+              </p>
+            </div>
+            <button id="restartBtn" class="btn btn--ghost">
+              Reiniciar actividad
+            </button>
+          </div>
+
+          <div id="studentPills" class="student-pills">
+            <span id="pillStudentName" class="chip--card"></span>
+            <span id="pillStudentCareer" class="chip--card"></span>
+            <span id="pillStudentGroup" class="chip--card"></span>
+          </div>
+
+          <div class="progress-block">
+            <div class="progress-bar">
+              <div id="progressFill" class="progress-bar__fill"></div>
+            </div>
+            <p id="progressText" class="progress-text">0% completado</p>
+          </div>
+
+          <div class="score-grid">
+            <article class="score-card">
+              <span class="score-card__label">Misión 1</span>
+              <strong id="mission1Score">0 / 6</strong>
+              <small>Detectar el tipo de mensaje</small>
+            </article>
+            <article class="score-card">
+              <span class="score-card__label">Misión 2</span>
+              <strong id="mission2Score">0 / 6</strong>
+              <small>Clasificar evidencias</small>
+            </article>
+            <article class="score-card">
+              <span class="score-card__label">Estado</span>
+              <strong id="missionState">Inicio</strong>
+              <small>Avance general</small>
+            </article>
+          </div>
+        </section>
+
+        <nav class="step-nav" aria-label="Navegación de fases">
+          <button class="step-nav__button is-active" id="openStep1">
+            1. Apertura
+          </button>
+          <button class="step-nav__button" id="openStep2" disabled>
+            2. Desarrollo
+          </button>
+          <button class="step-nav__button" id="openStep3" disabled>
+            3. Cierre
+          </button>
+        </nav>
+
+        <section id="step1" class="phase card is-visible">
+          <div class="phase__header">
+            <div>
+              <p class="phase__tag">Apertura</p>
+              <h2>Misión 1: Detecta qué está pasando</h2>
+            </div>
+            <span class="badge">Paso a paso</span>
+          </div>
+
+          <div class="guide-box guide-box--blue">
+            <h3>Qué debes hacer</h3>
+            <ol>
+              <li>Lee el mensaje en pantalla.</li>
+              <li>Elige la opción que mejor lo describe.</li>
+              <li>
+                Lee la retroalimentación antes de pasar al siguiente caso.
+              </li>
+            </ol>
+            <p>
+              <strong>Recuerda:</strong> no solo pienses en lo que dice el
+              mensaje, también en cómo puede hacer sentir a quien lo recibe.
+            </p>
+          </div>
+
+          <div class="mission-layout">
+            <article class="mission-card mission-card--social">
+              <div class="mission-card__header">
+                <span id="caseCounter" class="mission-counter"
+                  >Caso 1 de 6</span
+                >
+                <span class="social-tag">Publicación simulada</span>
+              </div>
+              <div id="openingMessage" class="social-post"></div>
+            </article>
+
+            <aside class="support-card">
+              <h3>Pista para observar</h3>
+              <p id="openingHint">
+                Busca si el mensaje humilla, presiona, excluye o apoya.
+              </p>
+            </aside>
+          </div>
+
+          <div id="openingOptions" class="option-grid"></div>
+
+          <div
+            id="openingFeedback"
+            class="feedback-box"
+            aria-live="polite"
+          ></div>
+
+          <div class="phase__actions">
+            <button id="nextOpeningBtn" class="btn btn--primary" disabled>
+              Siguiente caso
+            </button>
+          </div>
+        </section>
+
+        <section id="step2" class="phase card">
+          <div class="phase__header">
+            <div>
+              <p class="phase__tag">Desarrollo</p>
+              <h2>Misión 2: Analiza las evidencias</h2>
+            </div>
+            <span class="badge">Interacción guiada</span>
+          </div>
+
+          <div class="guide-box guide-box--purple">
+            <h3>Qué debes hacer</h3>
+            <ol>
+              <li>Observa la evidencia digital.</li>
+              <li>Clasifícala en la categoría correcta.</li>
+              <li>Revisa la explicación del sistema.</li>
+              <li>Continúa con la siguiente evidencia.</li>
+            </ol>
+            <p>
+              <strong>Categorías posibles:</strong> Apoyo, Burla, Presión
+              social, Exclusión, Rumor y Convivencia sana.
+            </p>
+          </div>
+
+          <div class="mission-layout">
+            <article class="mission-card mission-card--lab">
+              <div class="mission-card__header">
+                <span id="evidenceCounter" class="mission-counter"
+                  >Evidencia 1 de 6</span
+                >
+                <span class="social-tag social-tag--lab"
+                  >Laboratorio digital</span
+                >
+              </div>
+              <div id="evidenceMessage" class="evidence-post"></div>
+            </article>
+
+            <aside class="support-card">
+              <h3>Pregunta orientadora</h3>
+              <p id="developmentHint">
+                ¿Este contenido ayuda, ridiculiza, presiona, excluye o difunde
+                algo no confirmado?
+              </p>
+            </aside>
+          </div>
+
+          <div id="developmentOptions" class="category-grid"></div>
+
+          <div
+            id="developmentFeedback"
+            class="feedback-box"
+            aria-live="polite"
+          ></div>
+
+          <div class="micro-reflection card-soft">
+            <h3>Mini reflexión guiada</h3>
+            <p>
+              Después de observar varias evidencias, completa estas preguntas
+              para cerrar tu análisis.
+            </p>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="emotionReflection"
+                  >¿Qué emoción aparece con más fuerza?</label
+                >
+                <select id="emotionReflection">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Apoyo">Apoyo</option>
+                  <option value="Burla">Burla</option>
+                  <option value="Presión">Presión</option>
+                  <option value="Exclusión">Exclusión</option>
+                  <option value="Tensión">Tensión</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="effectReflection"
+                  >¿Qué efecto podría generar en la convivencia?</label
+                >
+                <select id="effectReflection">
+                  <option value="">Selecciona una opción</option>
+                  <option value="Más confianza y apoyo">
+                    Más confianza y apoyo
+                  </option>
+                  <option value="Conflictos o malentendidos">
+                    Conflictos o malentendidos
+                  </option>
+                  <option value="Aislamiento de algunos estudiantes">
+                    Aislamiento de algunos estudiantes
+                  </option>
+                  <option value="Presión por encajar en el grupo">
+                    Presión por encajar en el grupo
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="analysisConclusion"
+                >Escribe una conclusión breve</label
+              >
+              <textarea
+                id="analysisConclusion"
+                rows="4"
+                placeholder="Ejemplo: En los mensajes analizados aparecen bromas que en realidad generan presión y ridiculización. Esto puede afectar la convivencia y la participación de algunos compañeros."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="phase__actions">
+            <button id="nextEvidenceBtn" class="btn btn--primary" disabled>
+              Siguiente evidencia
+            </button>
+          </div>
+        </section>
+
+        <section id="step3" class="phase card">
+          <div class="phase__header">
+            <div>
+              <p class="phase__tag">Cierre</p>
+              <h2>Misión 3: Construye tu conclusión final</h2>
+            </div>
+            <span class="badge">Síntesis</span>
+          </div>
+
+          <div class="guide-box guide-box--green">
+            <h3>Qué debes hacer</h3>
+            <ol>
+              <li>Selecciona el patrón que viste con más frecuencia.</li>
+              <li>Completa el semáforo de hallazgos.</li>
+              <li>
+                Escribe una propuesta para mejorar la convivencia digital.
+              </li>
+              <li>Genera tu reporte final.</li>
+            </ol>
+          </div>
+
+          <div class="form-field">
+            <label for="mainPattern">¿Cuál fue el patrón predominante?</label>
+            <select id="mainPattern">
+              <option value="">Selecciona una opción</option>
+              <option value="Burla">Burla</option>
+              <option value="Presión social">Presión social</option>
+              <option value="Exclusión">Exclusión</option>
+              <option value="Rumor">Rumor</option>
+              <option value="Apoyo">Apoyo</option>
+              <option value="Convivencia sana">Convivencia sana</option>
+            </select>
+          </div>
+
+          <div class="traffic-grid">
+            <div class="traffic-card traffic-card--red">
+              <h3>
+                <span class="dot dot--red"></span> Rojo: principal problema
+                detectado
+              </h3>
+              <textarea
+                id="redFinding"
+                rows="4"
+                placeholder="Ejemplo: Se usan bromas que ridiculizan a compañeros frente al grupo."
+              ></textarea>
+            </div>
+            <div class="traffic-card traffic-card--yellow">
+              <h3>
+                <span class="dot dot--yellow"></span> Amarillo: situación que
+                debe vigilarse
+              </h3>
+              <textarea
+                id="yellowFinding"
+                rows="4"
+                placeholder="Ejemplo: Algunos mensajes presionan a participar para no quedar fuera."
+              ></textarea>
+            </div>
+            <div class="traffic-card traffic-card--green">
+              <h3>
+                <span class="dot dot--green"></span> Verde: acción positiva a
+                fortalecer
+              </h3>
+              <textarea
+                id="greenFinding"
+                rows="4"
+                placeholder="Ejemplo: Promover mensajes de apoyo y ayuda entre compañeros."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="improvementProposal"
+              >¿Qué propones para mejorar la convivencia digital?</label
+            >
+            <textarea
+              id="improvementProposal"
+              rows="5"
+              placeholder="Ejemplo: Establecer acuerdos de convivencia digital, reflexionar antes de publicar y promover el respeto en los grupos escolares."
+            ></textarea>
+          </div>
+
+          <div class="phase__actions">
+            <button id="generateReportBtn" class="btn btn--primary">
+              Generar reporte final
+            </button>
+          </div>
+
+          <article id="finalReport" class="final-report"></article>
+          <div id="evidenceBlock" class="evidence-block"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="welcomeDialog" class="welcome-dialog">
+      <div class="welcome-dialog__content">
+        <p class="eyebrow">Antes de comenzar</p>
+        <h2>Registra tus datos</h2>
+        <div class="form-grid" style="margin-top: 14px">
+          <div class="form-field">
+            <label for="dlgName">Nombre(s)</label>
+            <input id="dlgName" type="text" placeholder="Escribe tu nombre" />
+          </div>
+          <div class="form-field">
+            <label for="dlgLastname">Apellidos</label>
+            <input
+              id="dlgLastname"
+              type="text"
+              placeholder="Escribe tus apellidos"
+            />
+          </div>
+          <div class="form-field">
+            <label for="dlgCareer">Carrera</label>
+            <select id="dlgCareer">
+              <option value="">Selecciona tu carrera</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="dlgGroup">Grupo</label>
+            <select id="dlgGroup">
+              <option value="">Selecciona un grupo</option>
+              <option>A</option>
+              <option>B</option>
+            </select>
+          </div>
+        </div>
+        <div id="dlgError" class="feedback-box" style="margin-top: 12px"></div>
+        <button
+          id="startActivityBtn"
+          class="btn btn--primary"
+          style="margin-top: 16px; width: 100%"
+        >
+          Comenzar actividad
+        </button>
+      </div>
+    </dialog>
+
+    <script src="script.js"></script>
+  </body>
+</html>
