@@ -386,7 +386,7 @@
 
     .final-grid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:16px;
       margin-top:18px;
     }
@@ -464,8 +464,18 @@
           <h2>Comenzar</h2>
           <div class="form-grid">
             <div>
-              <label for="studentName">Nombre</label>
+              <label for="studentName">Nombre(s)</label>
               <input id="studentName" type="text" placeholder="Escribe tu nombre" />
+            </div>
+            <div>
+              <label for="studentLastname">Apellidos</label>
+              <input id="studentLastname" type="text" placeholder="Escribe tus apellidos" />
+            </div>
+            <div>
+              <label for="studentCareer">Carrera</label>
+              <select id="studentCareer">
+                <option value="">Selecciona tu carrera</option>
+              </select>
             </div>
             <div>
               <label for="studentGroup">Grupo</label>
@@ -473,10 +483,6 @@
                 <option value="">Selecciona un grupo</option>
                 <option>A</option>
                 <option>B</option>
-                <option>C</option>
-                <option>D</option>
-                <option>E</option>
-                <option>F</option>
               </select>
             </div>
             <button class="btn btn-primary" id="startBtn">Iniciar juego</button>
@@ -496,6 +502,7 @@
           </div>
           <div class="student-box">
             <div class="pill" id="pillName">Nombre:</div>
+            <div class="pill" id="pillCareer">Carrera:</div>
             <div class="pill" id="pillGroup">Grupo:</div>
             <div class="pill" id="pillStep">Escena 1</div>
           </div>
@@ -573,6 +580,10 @@
             Estudiante
           </div>
           <div class="final-card">
+            <strong id="finalCareer">-</strong>
+            Carrera
+          </div>
+          <div class="final-card">
             <strong id="finalGroup">-</strong>
             Grupo
           </div>
@@ -621,11 +632,22 @@
         <div class="actions">
           <button class="btn btn-primary" id="playAgainBtn">Jugar de nuevo</button>
         </div>
+
+        <div class="final-box" id="evidenceBlock" style="display:none; margin-top:12px;"></div>
       </div>
     </section>
   </div>
 
   <script>
+    const CAREERS = [
+      "TÉCNICO EN ACUACULTURA",
+      "TÉCNICO EN MECÁNICA NAVAL",
+      "TÉCNICO EN PREPARACIÓN DE ALIMENTOS Y BEBIDAS",
+      "TÉCNICO EN RECREACIONES ACUÁTICAS",
+      "TÉCNICO EN AIRE ACONDICIONADO",
+      "TÉCNICO LABORATORISTA AMBIENTAL"
+    ];
+
     const gameData = [
       {
         theme: "celular",
@@ -793,6 +815,8 @@
 
     const state = {
       name: "",
+      lastname: "",
+      career: "",
       group: "",
       current: 0,
       convivencia: 50,
@@ -800,7 +824,8 @@
       responsabilidad: 50,
       etica: 50,
       history: [],
-      answeredCurrent: false
+      answeredCurrent: false,
+      evidenceId: ""
     };
 
     const screenStart = document.getElementById("screenStart");
@@ -812,6 +837,26 @@
     const optionsContainer = document.getElementById("optionsContainer");
     const historyList = document.getElementById("historyList");
     const nextBtn = document.getElementById("nextBtn");
+
+    function populateCareers() {
+      const select = document.getElementById("studentCareer");
+      CAREERS.forEach(career => {
+        const option = document.createElement("option");
+        option.value = career;
+        option.textContent = career;
+        select.appendChild(option);
+      });
+    }
+
+    function generateEvidenceId() {
+      const initials = `${state.name.charAt(0) || "X"}${state.lastname.charAt(0) || "X"}`.toUpperCase();
+      const group = (state.group || "X").toUpperCase();
+      const now = new Date();
+      const pad = n => String(n).padStart(2, "0");
+      const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      const random = Math.floor(1000 + Math.random() * 9000);
+      return `EVID-${initials}${group}-${stamp}-${random}`;
+    }
 
     function clamp(value) {
       return Math.max(0, Math.min(100, value));
@@ -834,7 +879,9 @@
     }
 
     function updateHeader() {
-      document.getElementById("pillName").textContent = "Nombre: " + state.name;
+      const fullName = `${state.name} ${state.lastname}`.trim();
+      document.getElementById("pillName").textContent = "Nombre: " + fullName;
+      document.getElementById("pillCareer").textContent = "Carrera: " + state.career;
       document.getElementById("pillGroup").textContent = "Grupo: " + state.group;
       document.getElementById("pillStep").textContent = `Escena ${state.current + 1} de ${gameData.length}`;
     }
@@ -969,7 +1016,9 @@
     }
 
     function buildFinal() {
-      document.getElementById("finalName").textContent = state.name;
+      const fullName = `${state.name} ${state.lastname}`.trim();
+      document.getElementById("finalName").textContent = fullName;
+      document.getElementById("finalCareer").textContent = state.career;
       document.getElementById("finalGroup").textContent = state.group;
 
       setFinalMeter("Convivencia", state.convivencia, "finalMeterConvivencia", "finalValueConvivencia");
@@ -996,6 +1045,11 @@
 
       document.getElementById("finalLevel").textContent = level;
       document.getElementById("finalInterpretation").textContent = interpretation;
+
+      state.evidenceId = generateEvidenceId();
+      const evidenceBlock = document.getElementById("evidenceBlock");
+      evidenceBlock.style.display = "block";
+      evidenceBlock.textContent = `[${fullName}], [${state.career}], Grupo ${state.group}, Nivel: ${level}, Evidencia: ${state.evidenceId}`;
     }
 
     function setFinalMeter(label, value, barId, textId) {
@@ -1005,10 +1059,24 @@
 
     document.getElementById("startBtn").addEventListener("click", () => {
       const name = document.getElementById("studentName").value.trim();
+      const lastname = document.getElementById("studentLastname").value.trim();
+      const career = document.getElementById("studentCareer").value;
       const group = document.getElementById("studentGroup").value;
 
       if (!name) {
-        startError.textContent = "Escribe el nombre del estudiante.";
+        startError.textContent = "Escribe tu nombre.";
+        startError.classList.add("show");
+        return;
+      }
+
+      if (!lastname) {
+        startError.textContent = "Escribe tus apellidos.";
+        startError.classList.add("show");
+        return;
+      }
+
+      if (!career) {
+        startError.textContent = "Selecciona tu carrera.";
         startError.classList.add("show");
         return;
       }
@@ -1021,8 +1089,13 @@
 
       startError.classList.remove("show");
       state.name = name;
+      state.lastname = lastname;
+      state.career = career;
       state.group = group;
+      state.evidenceId = "";
       resetState();
+      document.getElementById("evidenceBlock").style.display = "none";
+      document.getElementById("evidenceBlock").textContent = "";
       renderScene();
       showScreen(screenGame);
     });
@@ -1044,15 +1117,22 @@
 
     document.getElementById("restartBtn").addEventListener("click", () => {
       resetState();
+      state.evidenceId = "";
+      document.getElementById("evidenceBlock").style.display = "none";
+      document.getElementById("evidenceBlock").textContent = "";
       renderScene();
     });
 
     document.getElementById("playAgainBtn").addEventListener("click", () => {
       resetState();
+      state.evidenceId = "";
+      document.getElementById("evidenceBlock").style.display = "none";
+      document.getElementById("evidenceBlock").textContent = "";
       renderScene();
       showScreen(screenGame);
     });
 
+    populateCareers();
     updateMeters();
     renderHistory();
   </script>
