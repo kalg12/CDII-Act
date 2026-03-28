@@ -1,0 +1,1401 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convivencia digital - Actividad interactiva</title>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --card: #ffffff;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --primary: #2563eb;
+        --primary-soft: #dbeafe;
+        --success: #16a34a;
+        --success-soft: #dcfce7;
+        --danger: #dc2626;
+        --danger-soft: #fee2e2;
+        --warning: #ca8a04;
+        --warning-soft: #fef9c3;
+        --border: #d1d5db;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+        color: var(--text);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .screen {
+        display: none;
+        animation: fadeIn 0.35s ease;
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 24px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(209, 213, 219, 0.6);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 20px;
+        align-items: stretch;
+      }
+
+      .hero h1 {
+        margin: 0 0 10px;
+        font-size: 2rem;
+        color: #0f172a;
+      }
+
+      .hero p {
+        margin: 8px 0;
+        line-height: 1.6;
+      }
+
+      .badge {
+        display: inline-block;
+        background: var(--primary-soft);
+        color: var(--primary);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        font-size: 1rem;
+        outline: none;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      }
+
+      .btn {
+        border: none;
+        border-radius: 14px;
+        padding: 14px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition:
+          transform 0.15s ease,
+          opacity 0.15s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: #0f172a;
+        color: white;
+      }
+
+      .btn-light {
+        background: #e5e7eb;
+        color: #111827;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .info-box {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .info-box h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.05rem;
+        color: #0f172a;
+      }
+
+      .subtle {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .student-data {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .pill {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #1d4ed8;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-weight: bold;
+        font-size: 0.95rem;
+      }
+
+      .progress {
+        height: 14px;
+        background: #e5e7eb;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 14px;
+      }
+
+      .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #2563eb, #38bdf8);
+        transition: width 0.3s ease;
+      }
+
+      .instructions {
+        background: #f8fafc;
+        border-left: 6px solid var(--primary);
+        padding: 16px 18px;
+        border-radius: 12px;
+        margin-top: 16px;
+        line-height: 1.6;
+      }
+
+      .relation-board {
+        position: relative;
+        min-height: 540px;
+        margin-top: 18px;
+        border-radius: 20px;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        padding: 20px;
+      }
+
+      .relation-columns {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 120px;
+        min-height: 500px;
+        align-items: start;
+      }
+
+      .column-title {
+        text-align: center;
+        margin-bottom: 14px;
+        font-size: 1.05rem;
+        font-weight: bold;
+        color: #0f172a;
+      }
+
+      .item-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .match-item {
+        position: relative;
+        background: white;
+        border: 2px solid #dbe3f0;
+        border-radius: 16px;
+        padding: 14px 16px;
+        min-height: 72px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+        user-select: none;
+      }
+
+      .match-item:hover {
+        transform: translateY(-2px);
+        border-color: #93c5fd;
+      }
+
+      .match-item.selected {
+        border-color: var(--primary);
+        background: var(--primary-soft);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+      }
+
+      .match-item.correct {
+        border-color: var(--success);
+        background: var(--success-soft);
+        color: #14532d;
+        cursor: default;
+      }
+
+      .match-item.wrong {
+        border-color: var(--danger);
+        background: var(--danger-soft);
+        color: #7f1d1d;
+      }
+
+      .match-item.locked {
+        pointer-events: none;
+      }
+
+      .match-item small {
+        display: block;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .board-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .feedback {
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: 14px;
+        font-weight: bold;
+        display: none;
+      }
+
+      .feedback.show {
+        display: block;
+      }
+
+      .feedback.good {
+        background: var(--success-soft);
+        color: #166534;
+        border: 1px solid #86efac;
+      }
+
+      .feedback.bad {
+        background: var(--danger-soft);
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .score-box {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .score-card {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 18px;
+        border: 1px solid #e5e7eb;
+        text-align: center;
+      }
+
+      .score-card strong {
+        display: block;
+        font-size: 1.8rem;
+        color: #0f172a;
+        margin-bottom: 6px;
+      }
+
+      .reflection-box {
+        margin-top: 16px;
+      }
+
+      .final-box {
+        background: linear-gradient(135deg, #eff6ff, #f8fafc);
+        border: 1px solid #dbeafe;
+        border-radius: 18px;
+        padding: 20px;
+        line-height: 1.7;
+      }
+
+      .mini-title {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #0f172a;
+      }
+
+      .footer-note {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.92rem;
+        margin-top: 10px;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .info-grid,
+        .score-box,
+        .relation-columns {
+          grid-template-columns: 1fr;
+        }
+
+        .relation-columns {
+          gap: 28px;
+        }
+
+        .relation-board {
+          min-height: 780px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 14px;
+        }
+
+        .card {
+          padding: 16px;
+        }
+
+        .hero h1 {
+          font-size: 1.6rem;
+        }
+
+        .match-item {
+          min-height: 82px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- PANTALLA 1 -->
+      <section id="screen-start" class="screen active">
+        <div class="card hero">
+          <div>
+            <span class="badge">Actividad interactiva</span>
+            <h1>Convivencia digital en estudiantes de preparatoria</h1>
+            <p>
+              <strong>Problemática:</strong> En grupos de WhatsApp, historias de
+              Instagram y publicaciones compartidas circulan indirectas, burlas
+              y memes sobre compañeros. Algunas personas lo ven como juego, pero
+              otras dicen que afecta la convivencia y el ambiente escolar.
+            </p>
+            <p>
+              <strong>Objetivo:</strong> Analizar cómo las interacciones en
+              redes sociales afectan la convivencia escolar.
+            </p>
+            <p class="subtle">
+              Esta actividad te permitirá relacionar métodos de investigación
+              con situaciones reales del problema planteado.
+            </p>
+          </div>
+
+          <div class="card" style="margin: 0">
+            <h2 style="margin-top: 0">Antes de comenzar</h2>
+            <div class="form-grid">
+              <div>
+                <label for="studentName">Nombre(s)</label>
+                <input
+                  id="studentName"
+                  type="text"
+                  placeholder="Escribe tu nombre"
+                />
+              </div>
+
+              <div>
+                <label for="studentLastname">Apellidos</label>
+                <input
+                  id="studentLastname"
+                  type="text"
+                  placeholder="Escribe tus apellidos"
+                />
+              </div>
+
+              <div>
+                <label for="studentCareer">Carrera</label>
+                <select id="studentCareer">
+                  <option value="">Selecciona tu carrera</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="studentGroup">Grupo</label>
+                <select id="studentGroup">
+                  <option value="">Selecciona un grupo</option>
+                  <option>A</option>
+                  <option>B</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary" id="startBtn">
+                Iniciar actividad
+              </button>
+              <div id="startError" class="feedback bad"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="mini-title">Métodos que se trabajarán</h2>
+          <div class="info-grid">
+            <div class="info-box">
+              <h3>Ciberetnografía</h3>
+              <p>
+                Observar comportamientos en espacios digitales como redes
+                sociales y grupos de mensajería.
+              </p>
+            </div>
+            <div class="info-box">
+              <h3>Análisis de contenido en línea</h3>
+              <p>
+                Clasificar publicaciones, mensajes, memes y comentarios según su
+                intención o impacto.
+              </p>
+            </div>
+            <div class="info-box">
+              <h3>Grupo focal</h3>
+              <p>
+                Conocer opiniones y percepciones de varios estudiantes al
+                dialogar sobre el tema.
+              </p>
+            </div>
+            <div class="info-box">
+              <h3>Entrevista</h3>
+              <p>
+                Profundizar en experiencias individuales y sentimientos
+                personales.
+              </p>
+            </div>
+            <div class="info-box">
+              <h3>Observación</h3>
+              <p>
+                Registrar conductas visibles en el entorno escolar relacionadas
+                con la convivencia.
+              </p>
+            </div>
+            <div class="info-box">
+              <h3>Encuesta digital</h3>
+              <p>
+                Medir frecuencia, percepción y alcance del problema con
+                respuestas de un grupo amplio.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANTALLA 2 -->
+      <section id="screen-game-1" class="screen">
+        <div class="card">
+          <div class="topbar">
+            <div>
+              <h2 style="margin: 0 0 6px">
+                Actividad 1: Relaciona el método con su aplicación
+              </h2>
+              <p class="subtle" style="margin: 0">
+                Haz clic en un método de la izquierda y luego en la descripción
+                correcta de la derecha.
+              </p>
+            </div>
+
+            <div class="student-data">
+              <div class="pill" id="pillName">Nombre:</div>
+              <div class="pill" id="pillCareer">Carrera:</div>
+              <div class="pill" id="pillGroup">Grupo:</div>
+              <div class="pill" id="pillScore1">Puntaje: 0</div>
+            </div>
+          </div>
+
+          <div class="instructions">
+            <strong>Instrucciones:</strong> Debes unir cada método de
+            investigación con la acción que mejor corresponde a la problemática
+            de convivencia digital. Al relacionar elementos, aparecerá una
+            <strong>flecha trazada</strong> en el tablero.
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar" id="progress1"></div>
+          </div>
+
+          <div class="relation-board" id="board1">
+            <svg class="board-svg" id="svg1">
+              <defs>
+                <marker
+                  id="arrowHead1"
+                  markerWidth="12"
+                  markerHeight="12"
+                  refX="10"
+                  refY="6"
+                  orient="auto"
+                >
+                  <path d="M0,0 L12,6 L0,12 z" fill="#2563eb"></path>
+                </marker>
+              </defs>
+            </svg>
+
+            <div class="relation-columns">
+              <div>
+                <div class="column-title">Métodos</div>
+                <div class="item-list" id="leftList1"></div>
+              </div>
+
+              <div>
+                <div class="column-title">Aplicación del método</div>
+                <div class="item-list" id="rightList1"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="feedback1" class="feedback"></div>
+
+          <div class="actions">
+            <button class="btn btn-light" id="resetGame1">
+              Reiniciar actividad 1
+            </button>
+            <button class="btn btn-secondary" id="nextToGame2" disabled>
+              Continuar a la actividad 2
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANTALLA 3 -->
+      <section id="screen-game-2" class="screen">
+        <div class="card">
+          <div class="topbar">
+            <div>
+              <h2 style="margin: 0 0 6px">
+                Actividad 2: Relaciona la evidencia con el método adecuado
+              </h2>
+              <p class="subtle" style="margin: 0">
+                Ahora une cada caso o evidencia con el método más útil para
+                investigarlo.
+              </p>
+            </div>
+
+            <div class="student-data">
+              <div class="pill" id="pillName2">Nombre:</div>
+              <div class="pill" id="pillCareer2">Carrera:</div>
+              <div class="pill" id="pillGroup2">Grupo:</div>
+              <div class="pill" id="pillScore2">Puntaje: 0</div>
+            </div>
+          </div>
+
+          <div class="instructions">
+            <strong>Instrucciones:</strong> Piensa cuál método sería el más
+            adecuado para estudiar cada evidencia o situación. De nuevo, al unir
+            cada pareja aparecerá una <strong>flecha trazada</strong>.
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar" id="progress2"></div>
+          </div>
+
+          <div class="relation-board" id="board2">
+            <svg class="board-svg" id="svg2">
+              <defs>
+                <marker
+                  id="arrowHead2"
+                  markerWidth="12"
+                  markerHeight="12"
+                  refX="10"
+                  refY="6"
+                  orient="auto"
+                >
+                  <path d="M0,0 L12,6 L0,12 z" fill="#2563eb"></path>
+                </marker>
+              </defs>
+            </svg>
+
+            <div class="relation-columns">
+              <div>
+                <div class="column-title">Evidencias o situaciones</div>
+                <div class="item-list" id="leftList2"></div>
+              </div>
+
+              <div>
+                <div class="column-title">Método más adecuado</div>
+                <div class="item-list" id="rightList2"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="feedback2" class="feedback"></div>
+
+          <div class="actions">
+            <button class="btn btn-light" id="resetGame2">
+              Reiniciar actividad 2
+            </button>
+            <button class="btn btn-secondary" id="goToFinal" disabled>
+              Ir al cierre
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANTALLA 4 -->
+      <section id="screen-final" class="screen">
+        <div class="card">
+          <h2 style="margin-top: 0">Cierre de la actividad</h2>
+
+          <div class="score-box">
+            <div class="score-card">
+              <strong id="finalName">-</strong>
+              Estudiante
+            </div>
+            <div class="score-card">
+              <strong id="finalCareer">-</strong>
+              Carrera
+            </div>
+            <div class="score-card">
+              <strong id="finalGroup">-</strong>
+              Grupo
+            </div>
+            <div class="score-card">
+              <strong id="finalScore">0</strong>
+              Puntaje total
+            </div>
+          </div>
+
+          <div class="final-box" style="margin-top: 18px">
+            <h3 class="mini-title">¿Qué aprendiste?</h3>
+            <p>
+              La convivencia digital no depende solo de lo que se publica, sino
+              también de cómo se interpreta, cómo afecta a otros y cómo
+              repercute en el ambiente escolar.
+            </p>
+            <p>
+              Los métodos de investigación ayudan a estudiar este problema desde
+              diferentes ángulos:
+            </p>
+            <p>
+              <strong>Ciberetnografía</strong> para observar interacciones
+              digitales; <strong>análisis de contenido</strong> para clasificar
+              mensajes; <strong>grupo focal</strong> para escuchar al grupo;
+              <strong>entrevista</strong> para profundizar en experiencias;
+              <strong>observación</strong> para registrar conductas visibles; y
+              <strong>encuesta digital</strong> para medir frecuencia y
+              percepción.
+            </p>
+          </div>
+
+          <div class="reflection-box">
+            <label for="reflection">Escribe una conclusión breve:</label>
+            <textarea
+              id="reflection"
+              rows="5"
+              placeholder="Ejemplo: Las redes sociales pueden afectar la convivencia escolar cuando se usan para burlas o indirectas. Por eso es importante investigar el problema con métodos adecuados y promover el respeto digital."
+            ></textarea>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="finishBtn">Finalizar</button>
+            <button class="btn btn-light" id="restartAll">
+              Volver a empezar
+            </button>
+          </div>
+
+          <div id="finalMessage" class="feedback"></div>
+          <div
+            id="evidenceBlock"
+            class="final-box"
+            style="margin-top: 12px; display: none"
+          ></div>
+          <p class="footer-note">
+            Actividad interactiva sobre convivencia digital.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const CAREERS = [
+        "TÉCNICO EN ACUACULTURA",
+        "TÉCNICO EN MECÁNICA NAVAL",
+        "TÉCNICO EN PREPARACIÓN DE ALIMENTOS Y BEBIDAS",
+        "TÉCNICO EN RECREACIONES ACUÁTICAS",
+        "TÉCNICO EN AIRE ACONDICIONADO",
+        "TÉCNICO LABORATORISTA AMBIENTAL",
+      ];
+
+      const appState = {
+        studentName: "",
+        studentLastname: "",
+        studentCareer: "",
+        studentGroup: "",
+        score1: 0,
+        score2: 0,
+        evidenceId: "",
+      };
+
+      const game1Data = {
+        left: [
+          { id: "ciberetnografia", text: "Ciberetnografía" },
+          { id: "analisis", text: "Análisis de contenido en línea" },
+          { id: "grupofocal", text: "Grupo focal" },
+          { id: "entrevista", text: "Entrevista" },
+          { id: "observacion", text: "Observación" },
+          { id: "encuesta", text: "Encuesta digital" },
+        ],
+        right: shuffle([
+          {
+            id: "ciberetnografia",
+            text: "Observar cómo interactúan los estudiantes en grupos de WhatsApp, historias y publicaciones compartidas.",
+          },
+          {
+            id: "analisis",
+            text: "Clasificar memes, mensajes o indirectas según si son bromas, burlas, agresiones o exclusión.",
+          },
+          {
+            id: "grupofocal",
+            text: "Reunir a varios estudiantes para escuchar opiniones sobre cómo estas publicaciones afectan la convivencia.",
+          },
+          {
+            id: "entrevista",
+            text: "Hablar de manera individual con un estudiante para conocer cómo se sintió ante una burla o indirecta.",
+          },
+          {
+            id: "observacion",
+            text: "Registrar si en el salón o receso hay aislamiento, discusiones o cambios de conducta vinculados con publicaciones.",
+          },
+          {
+            id: "encuesta",
+            text: "Aplicar un formulario digital para medir cuántos estudiantes han visto, compartido o sufrido estas situaciones.",
+          },
+        ]),
+      };
+
+      const game2Data = {
+        left: [
+          {
+            id: "encuesta",
+            text: "Quieres saber cuántos estudiantes han visto memes o indirectas sobre compañeros durante el último mes.",
+          },
+          {
+            id: "entrevista",
+            text: "Necesitas profundizar en cómo se sintió una persona después de que circulara una burla sobre ella.",
+          },
+          {
+            id: "ciberetnografia",
+            text: "Buscas observar cómo se comportan los estudiantes dentro de los grupos digitales sin intervenir directamente.",
+          },
+          {
+            id: "analisis",
+            text: "Tienes capturas de mensajes, historias y memes, y quieres clasificarlos por tipo de contenido.",
+          },
+          {
+            id: "grupofocal",
+            text: "Quieres escuchar varias opiniones al mismo tiempo para saber qué piensa el grupo sobre estas prácticas.",
+          },
+          {
+            id: "observacion",
+            text: "Deseas registrar cambios visibles en la convivencia escolar después de conflictos originados en redes.",
+          },
+        ],
+        right: shuffle([
+          { id: "ciberetnografia", text: "Ciberetnografía" },
+          { id: "analisis", text: "Análisis de contenido en línea" },
+          { id: "grupofocal", text: "Grupo focal" },
+          { id: "entrevista", text: "Entrevista" },
+          { id: "observacion", text: "Observación" },
+          { id: "encuesta", text: "Encuesta digital" },
+        ]),
+      };
+
+      function shuffle(array) {
+        const cloned = [...array];
+        for (let i = cloned.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [cloned[i], cloned[j]] = [cloned[j], cloned[i]];
+        }
+        return cloned;
+      }
+
+      function showScreen(id) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((screen) => screen.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function setText(id, value) {
+        document.getElementById(id).textContent = value;
+      }
+
+      function populateCareers() {
+        const select = document.getElementById("studentCareer");
+        CAREERS.forEach((career) => {
+          const option = document.createElement("option");
+          option.value = career;
+          option.textContent = career;
+          select.appendChild(option);
+        });
+      }
+
+      function generateEvidenceId() {
+        const initials =
+          `${appState.studentName.charAt(0) || "X"}${appState.studentLastname.charAt(0) || "X"}`.toUpperCase();
+        const group = (appState.studentGroup || "X").toUpperCase();
+        const now = new Date();
+        const pad = (n) => String(n).padStart(2, "0");
+        const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+        const random = Math.floor(1000 + Math.random() * 9000);
+        return `EVID-${initials}${group}-${stamp}-${random}`;
+      }
+
+      function updateStudentPills() {
+        const fullName =
+          `${appState.studentName} ${appState.studentLastname}`.trim();
+        setText("pillName", "Nombre: " + fullName);
+        setText("pillCareer", "Carrera: " + appState.studentCareer);
+        setText("pillGroup", "Grupo: " + appState.studentGroup);
+        setText("pillScore1", "Puntaje: " + appState.score1 + "/6");
+
+        setText("pillName2", "Nombre: " + fullName);
+        setText("pillCareer2", "Carrera: " + appState.studentCareer);
+        setText("pillGroup2", "Grupo: " + appState.studentGroup);
+        setText("pillScore2", "Puntaje: " + appState.score2 + "/6");
+
+        setText("finalName", fullName);
+        setText("finalCareer", appState.studentCareer);
+        setText("finalGroup", appState.studentGroup);
+        setText("finalScore", `${appState.score1 + appState.score2}/12`);
+      }
+
+      function showStartError(message) {
+        const error = document.getElementById("startError");
+        error.textContent = message;
+        error.className = "feedback bad show";
+      }
+
+      function hideStartError() {
+        const error = document.getElementById("startError");
+        error.textContent = "";
+        error.className = "feedback bad";
+      }
+
+      class RelationGame {
+        constructor(config) {
+          this.boardId = config.boardId;
+          this.svgId = config.svgId;
+          this.leftListId = config.leftListId;
+          this.rightListId = config.rightListId;
+          this.feedbackId = config.feedbackId;
+          this.progressId = config.progressId;
+          this.nextBtnId = config.nextBtnId;
+          this.data = config.data;
+          this.scoreKey = config.scoreKey;
+          this.marker = config.marker;
+
+          this.selectedLeft = null;
+          this.selectedRight = null;
+          this.matched = new Set();
+          this.lines = [];
+        }
+
+        init() {
+          this.selectedLeft = null;
+          this.selectedRight = null;
+          this.matched.clear();
+          this.lines = [];
+
+          const leftContainer = document.getElementById(this.leftListId);
+          const rightContainer = document.getElementById(this.rightListId);
+          const svg = document.getElementById(this.svgId);
+
+          leftContainer.innerHTML = "";
+          rightContainer.innerHTML = "";
+          svg.querySelectorAll("line").forEach((line) => line.remove());
+
+          this.data.left.forEach((item) => {
+            const div = document.createElement("div");
+            div.className = "match-item";
+            div.dataset.id = item.id;
+            div.dataset.side = "left";
+            div.innerHTML = `<div>${item.text}</div>`;
+            div.addEventListener("click", () =>
+              this.handleClick(div, item, "left"),
+            );
+            leftContainer.appendChild(div);
+          });
+
+          this.data.right.forEach((item) => {
+            const div = document.createElement("div");
+            div.className = "match-item";
+            div.dataset.id = item.id;
+            div.dataset.side = "right";
+            div.innerHTML = `<div>${item.text}</div>`;
+            div.addEventListener("click", () =>
+              this.handleClick(div, item, "right"),
+            );
+            rightContainer.appendChild(div);
+          });
+
+          this.setFeedback("", "");
+          this.updateProgress();
+          if (this.nextBtnId) {
+            document.getElementById(this.nextBtnId).disabled = true;
+          }
+
+          window.requestAnimationFrame(() => this.redrawLines());
+          window.addEventListener("resize", () => this.redrawLines());
+        }
+
+        handleClick(element, item, side) {
+          if (element.classList.contains("correct")) return;
+
+          if (side === "left") {
+            this.clearSideSelection("left");
+            this.selectedLeft = element;
+            element.classList.add("selected");
+          } else {
+            this.clearSideSelection("right");
+            this.selectedRight = element;
+            element.classList.add("selected");
+          }
+
+          if (this.selectedLeft && this.selectedRight) {
+            this.checkMatch();
+          }
+        }
+
+        clearSideSelection(side) {
+          const selector =
+            side === "left"
+              ? `#${this.leftListId} .match-item.selected`
+              : `#${this.rightListId} .match-item.selected`;
+
+          document
+            .querySelectorAll(selector)
+            .forEach((el) => el.classList.remove("selected"));
+
+          if (side === "left") this.selectedLeft = null;
+          if (side === "right") this.selectedRight = null;
+        }
+
+        checkMatch() {
+          const leftId = this.selectedLeft.dataset.id;
+          const rightId = this.selectedRight.dataset.id;
+
+          if (leftId === rightId) {
+            this.selectedLeft.classList.remove("selected");
+            this.selectedRight.classList.remove("selected");
+            this.selectedLeft.classList.add("correct", "locked");
+            this.selectedRight.classList.add("correct", "locked");
+
+            this.drawLine(this.selectedLeft, this.selectedRight, "#16a34a");
+            this.matched.add(leftId);
+            appState[this.scoreKey] += 1;
+
+            this.setFeedback(
+              "¡Correcto! Has hecho una relación adecuada.",
+              "good",
+            );
+            updateStudentPills();
+            this.updateProgress();
+
+            this.selectedLeft = null;
+            this.selectedRight = null;
+
+            if (this.matched.size === this.data.left.length) {
+              this.setFeedback(
+                "Excelente. Has completado toda la actividad.",
+                "good",
+              );
+              if (this.nextBtnId) {
+                document.getElementById(this.nextBtnId).disabled = false;
+              }
+            }
+          } else {
+            const leftEl = this.selectedLeft;
+            const rightEl = this.selectedRight;
+
+            leftEl.classList.add("wrong");
+            rightEl.classList.add("wrong");
+            this.drawTempLine(leftEl, rightEl, "#dc2626");
+            this.setFeedback(
+              "Esa relación no corresponde. Intenta de nuevo.",
+              "bad",
+            );
+
+            setTimeout(() => {
+              leftEl.classList.remove("wrong", "selected");
+              rightEl.classList.remove("wrong", "selected");
+            }, 700);
+
+            this.selectedLeft = null;
+            this.selectedRight = null;
+          }
+        }
+
+        drawLine(fromEl, toEl, color) {
+          const svg = document.getElementById(this.svgId);
+          const board = document.getElementById(this.boardId);
+
+          const boardRect = board.getBoundingClientRect();
+          const fromRect = fromEl.getBoundingClientRect();
+          const toRect = toEl.getBoundingClientRect();
+
+          const x1 = fromRect.right - boardRect.left;
+          const y1 = fromRect.top + fromRect.height / 2 - boardRect.top;
+          const x2 = toRect.left - boardRect.left;
+          const y2 = toRect.top + toRect.height / 2 - boardRect.top;
+
+          const line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line",
+          );
+          line.setAttribute("x1", x1);
+          line.setAttribute("y1", y1);
+          line.setAttribute("x2", x2);
+          line.setAttribute("y2", y2);
+          line.setAttribute("stroke", color);
+          line.setAttribute("stroke-width", "4");
+          line.setAttribute("stroke-linecap", "round");
+          line.setAttribute("marker-end", `url(#${this.marker})`);
+          line.dataset.from = fromEl.dataset.id;
+          line.dataset.to = toEl.dataset.id;
+
+          svg.appendChild(line);
+          this.lines.push({
+            fromId: fromEl.dataset.id,
+            toId: toEl.dataset.id,
+            color,
+          });
+        }
+
+        drawTempLine(fromEl, toEl, color) {
+          const svg = document.getElementById(this.svgId);
+          const board = document.getElementById(this.boardId);
+
+          const boardRect = board.getBoundingClientRect();
+          const fromRect = fromEl.getBoundingClientRect();
+          const toRect = toEl.getBoundingClientRect();
+
+          const x1 = fromRect.right - boardRect.left;
+          const y1 = fromRect.top + fromRect.height / 2 - boardRect.top;
+          const x2 = toRect.left - boardRect.left;
+          const y2 = toRect.top + toRect.height / 2 - boardRect.top;
+
+          const line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line",
+          );
+          line.setAttribute("x1", x1);
+          line.setAttribute("y1", y1);
+          line.setAttribute("x2", x2);
+          line.setAttribute("y2", y2);
+          line.setAttribute("stroke", color);
+          line.setAttribute("stroke-width", "4");
+          line.setAttribute("stroke-linecap", "round");
+          line.setAttribute("marker-end", `url(#${this.marker})`);
+
+          svg.appendChild(line);
+
+          setTimeout(() => line.remove(), 650);
+        }
+
+        redrawLines() {
+          const svg = document.getElementById(this.svgId);
+          svg.querySelectorAll("line").forEach((line) => line.remove());
+
+          this.lines.forEach((savedLine) => {
+            const fromEl = document.querySelector(
+              `#${this.leftListId} .match-item[data-id="${savedLine.fromId}"]`,
+            );
+            const toEl = document.querySelector(
+              `#${this.rightListId} .match-item[data-id="${savedLine.toId}"]`,
+            );
+            if (fromEl && toEl) {
+              this.drawLine(fromEl, toEl, savedLine.color);
+            }
+          });
+
+          // evitar duplicar el historial al redibujar
+          const unique = [];
+          const map = new Set();
+          this.lines.forEach((item) => {
+            const key = item.fromId + "-" + item.toId;
+            if (!map.has(key)) {
+              map.add(key);
+              unique.push(item);
+            }
+          });
+          this.lines = unique;
+        }
+
+        updateProgress() {
+          const total = this.data.left.length;
+          const completed = this.matched.size;
+          const percent = (completed / total) * 100;
+          document.getElementById(this.progressId).style.width = percent + "%";
+        }
+
+        setFeedback(message, type) {
+          const feedback = document.getElementById(this.feedbackId);
+          if (!message) {
+            feedback.className = "feedback";
+            feedback.textContent = "";
+            return;
+          }
+
+          feedback.textContent = message;
+          feedback.className = `feedback show ${type}`;
+        }
+
+        reset() {
+          appState[this.scoreKey] = 0;
+
+          if (this.scoreKey === "score1") {
+            game1Data.right = shuffle([
+              {
+                id: "ciberetnografia",
+                text: "Observar cómo interactúan los estudiantes en grupos de WhatsApp, historias y publicaciones compartidas.",
+              },
+              {
+                id: "analisis",
+                text: "Clasificar memes, mensajes o indirectas según si son bromas, burlas, agresiones o exclusión.",
+              },
+              {
+                id: "grupofocal",
+                text: "Reunir a varios estudiantes para escuchar opiniones sobre cómo estas publicaciones afectan la convivencia.",
+              },
+              {
+                id: "entrevista",
+                text: "Hablar de manera individual con un estudiante para conocer cómo se sintió ante una burla o indirecta.",
+              },
+              {
+                id: "observacion",
+                text: "Registrar si en el salón o receso hay aislamiento, discusiones o cambios de conducta vinculados con publicaciones.",
+              },
+              {
+                id: "encuesta",
+                text: "Aplicar un formulario digital para medir cuántos estudiantes han visto, compartido o sufrido estas situaciones.",
+              },
+            ]);
+          }
+
+          if (this.scoreKey === "score2") {
+            game2Data.right = shuffle([
+              { id: "ciberetnografia", text: "Ciberetnografía" },
+              { id: "analisis", text: "Análisis de contenido en línea" },
+              { id: "grupofocal", text: "Grupo focal" },
+              { id: "entrevista", text: "Entrevista" },
+              { id: "observacion", text: "Observación" },
+              { id: "encuesta", text: "Encuesta digital" },
+            ]);
+          }
+
+          updateStudentPills();
+          this.init();
+        }
+      }
+
+      const relationGame1 = new RelationGame({
+        boardId: "board1",
+        svgId: "svg1",
+        leftListId: "leftList1",
+        rightListId: "rightList1",
+        feedbackId: "feedback1",
+        progressId: "progress1",
+        nextBtnId: "nextToGame2",
+        data: game1Data,
+        scoreKey: "score1",
+        marker: "arrowHead1",
+      });
+
+      const relationGame2 = new RelationGame({
+        boardId: "board2",
+        svgId: "svg2",
+        leftListId: "leftList2",
+        rightListId: "rightList2",
+        feedbackId: "feedback2",
+        progressId: "progress2",
+        nextBtnId: "goToFinal",
+        data: game2Data,
+        scoreKey: "score2",
+        marker: "arrowHead2",
+      });
+
+      document.getElementById("startBtn").addEventListener("click", () => {
+        const name = document.getElementById("studentName").value.trim();
+        const lastname = document
+          .getElementById("studentLastname")
+          .value.trim();
+        const career = document.getElementById("studentCareer").value;
+        const group = document.getElementById("studentGroup").value;
+
+        if (!name) {
+          showStartError("Por favor, escribe tu nombre.");
+          return;
+        }
+
+        if (!lastname) {
+          showStartError("Por favor, escribe tus apellidos.");
+          return;
+        }
+
+        if (!career) {
+          showStartError("Por favor, selecciona tu carrera.");
+          return;
+        }
+
+        if (!group) {
+          showStartError("Por favor, selecciona un grupo.");
+          return;
+        }
+
+        hideStartError();
+        appState.studentName = name;
+        appState.studentLastname = lastname;
+        appState.studentCareer = career;
+        appState.studentGroup = group;
+        appState.score1 = 0;
+        appState.score2 = 0;
+        appState.evidenceId = "";
+
+        updateStudentPills();
+        relationGame1.init();
+        showScreen("screen-game-1");
+      });
+
+      document.getElementById("nextToGame2").addEventListener("click", () => {
+        relationGame2.init();
+        showScreen("screen-game-2");
+      });
+
+      document.getElementById("goToFinal").addEventListener("click", () => {
+        updateStudentPills();
+        showScreen("screen-final");
+      });
+
+      document.getElementById("resetGame1").addEventListener("click", () => {
+        relationGame1.reset();
+      });
+
+      document.getElementById("resetGame2").addEventListener("click", () => {
+        relationGame2.reset();
+      });
+
+      document.getElementById("finishBtn").addEventListener("click", () => {
+        const reflection = document.getElementById("reflection").value.trim();
+        const finalMessage = document.getElementById("finalMessage");
+        const evidenceBlock = document.getElementById("evidenceBlock");
+
+        if (!reflection) {
+          finalMessage.textContent =
+            "Escribe una conclusión breve antes de finalizar.";
+          finalMessage.className = "feedback show bad";
+          evidenceBlock.style.display = "none";
+          evidenceBlock.textContent = "";
+          return;
+        }
+
+        appState.evidenceId = generateEvidenceId();
+        finalMessage.textContent = `Actividad finalizada correctamente. ${appState.studentName} ${appState.studentLastname} del grupo ${appState.studentGroup} obtuvo ${appState.score1 + appState.score2} de 12 puntos.`;
+        finalMessage.className = "feedback show good";
+        evidenceBlock.style.display = "block";
+        evidenceBlock.textContent = `[${appState.studentName} ${appState.studentLastname}], [${appState.studentCareer}], Grupo ${appState.studentGroup}, Puntaje: ${appState.score1 + appState.score2}/12, Evidencia: ${appState.evidenceId}`;
+      });
+
+      document.getElementById("restartAll").addEventListener("click", () => {
+        document.getElementById("studentName").value = "";
+        document.getElementById("studentLastname").value = "";
+        document.getElementById("studentCareer").value = "";
+        document.getElementById("studentGroup").value = "";
+        document.getElementById("reflection").value = "";
+        document.getElementById("finalMessage").className = "feedback";
+        document.getElementById("finalMessage").textContent = "";
+        document.getElementById("evidenceBlock").className = "final-box";
+        document.getElementById("evidenceBlock").style.display = "none";
+        document.getElementById("evidenceBlock").textContent = "";
+        hideStartError();
+
+        appState.studentName = "";
+        appState.studentLastname = "";
+        appState.studentCareer = "";
+        appState.studentGroup = "";
+        appState.score1 = 0;
+        appState.score2 = 0;
+        appState.evidenceId = "";
+
+        showScreen("screen-start");
+      });
+
+      populateCareers();
+    </script>
+  </body>
+</html>
